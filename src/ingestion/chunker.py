@@ -74,9 +74,10 @@ def main():
                     or ""
                 )
 
+                page_metadata = page.get("metadata") or {}
                 metadata = {
-                    "source": page.get("source", pdf_file.name),
-                    "page": page.get("page", 0),
+                    "source": page_metadata.get("source", pdf_file.name),
+                    "page": page_metadata.get("page", 0),
                 }
 
                 document = Document(
