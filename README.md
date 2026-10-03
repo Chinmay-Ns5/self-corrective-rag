@@ -21,6 +21,16 @@ Place the team's PDF corpus in `data/raw/pdfs/`. The PDFs and generated vector d
 
 The command prints JSON suitable for the future UI. For a local question, `route` is `LOCAL`; partial evidence selects `WEB`; irrelevant or absent evidence selects `REWRITE_AND_WEB`. The initial grade thresholds are 0.40 and 0.75. They are configuration defaults, not validated accuracy claims.
 
+## Streamlit UI
+
+Start the UI from the repository root with:
+
+```powershell
+streamlit run app.py
+```
+
+The interface is structured around the `pipeline.ask(question)` result contract. Live query integration is not connected yet; the isolated `run_crag_query(question)` adapter in `app.py` is the handoff point for connecting it.
+
 ## Backend contract
 
 `scripts.ask.make_pipeline().ask(question)` returns `question`, `answer`, `route`, `evaluation` (`score`, `reason`, `evidence_ids`), `rewritten_query`, `sources`, `latency_seconds`, and `error`. Local sources carry PDF filename and page; web sources carry URL and title. Empty or failed web searches return a clear unverified answer. The generator requires citations matching supplied evidence IDs.
