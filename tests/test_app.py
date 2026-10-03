@@ -9,7 +9,7 @@ from streamlit.testing.v1 import AppTest
 
 from src.crag.pipeline import CRAGPipeline
 from src.crag.settings import Settings
-from tests.test_crag import FakeLLM, FakeWeb
+from tests.test_crag import AmbiguityLLM, FakeLLM, FakeWeb
 
 APP = Path(__file__).resolve().parents[1] / "app.py"
 
@@ -66,15 +66,19 @@ class AppIntegrationTests(unittest.TestCase):
             self.assertGreater(len(app.warning), 0)
             factory.assert_not_called()
 
-    def test_vague_question_asks_for_context_without_loading_backend(self):
-        with patch("src.crag.service.make_pipeline") as factory:
+    def test_vague_question_asks_for_context_without_retrieval(self):
+        def unexpected_retrieval(question, top_k):
+            self.fail("A vague question must not retrieve unrelated PDFs")
+
+        pipeline = CRAGPipeline(unexpected_retrieval, AmbiguityLLM(0.9), FakeWeb(), Settings())
+        with patch("src.crag.service.make_pipeline", return_value=pipeline) as factory:
             app = AppTest.from_file(str(APP), default_timeout=20).run()
             self.submit(app, "What is this about?")
             self.assertEqual(len(app.exception), 0)
             self.assertEqual(app.session_state["crag_result"]["route"], "CLARIFY")
-            self.assertTrue(any("name the topic or document" in item.value for item in app.info))
+            self.assertTrue(any("topic or document" in item.value for item in app.info))
             self.assertEqual(len(app.metric), 0)
-            factory.assert_not_called()
+            factory.assert_called_once()
 
     def test_missing_tavily_key_shows_setup_step(self):
         class MissingKeyWeb:

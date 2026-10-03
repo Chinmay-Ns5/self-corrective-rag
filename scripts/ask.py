@@ -5,7 +5,6 @@ from contextlib import redirect_stdout
 import sys
 
 from src.crag.service import make_pipeline
-from src.crag.pipeline import clarification_result
 
 
 def main():
@@ -17,7 +16,7 @@ def main():
         with redirect_stdout(sys.stderr):
             if not args.question.strip():
                 raise ValueError("Question must not be empty")
-            result = clarification_result(args.question) or make_pipeline().ask(args.question)
+            result = make_pipeline().ask(args.question)
     except Exception as exc:
         print(json.dumps({"error": str(exc)}, ensure_ascii=False))
         raise SystemExit(1) from exc

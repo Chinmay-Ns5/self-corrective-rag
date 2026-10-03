@@ -6,12 +6,13 @@ from typing import TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
-from src.crag.prompts import GENERATOR, GRADER, REWRITER
+from src.crag.prompts import GENERATOR, GRADER, QUERY_CHECK, REWRITER
 from src.crag.settings import Settings
 
 
 class CRAGState(TypedDict, total=False):
     question: str
+    query_assessment: dict
     local_evidence: list[dict]
     evaluation: dict
     route: str
@@ -20,33 +21,6 @@ class CRAGState(TypedDict, total=False):
     evidence: list[dict]
     answer: str
     error: str
-
-
-_UNRESOLVED_REFERENCE = re.compile(
-    r"^(?:what (?:is|was) (?:this|that|it)(?: (?:paper|article|document))?(?: about)?|"
-    r"what (?:does|did) (?:this|that|it) mean|"
-    r"(?:tell me about|explain|summari[sz]e) (?:this|that|it)(?: (?:paper|article|document))?)$",
-    re.IGNORECASE,
-)
-
-
-def clarification_result(question):
-    """Ask for the missing referent before loading models or searching the web."""
-    normalized = re.sub(r"\s+", " ", question.strip().rstrip("?.! "))
-    if not _UNRESOLVED_REFERENCE.fullmatch(normalized):
-        return None
-    return {
-        "question": question.strip(),
-        "answer": ("Please name the topic or document you want me to explain. "
-                   "For example: 'What is dense passage retrieval?'"),
-        "route": "CLARIFY",
-        "evaluation": None,
-        "rewritten_query": None,
-        "retrieved_documents": [],
-        "sources": [],
-        "latency_seconds": 0.0,
-        "error": "",
-    }
 
 
 def local_chunks(results):
@@ -102,6 +76,24 @@ class CRAGPipeline:
         self.web = web
         self.settings = settings or Settings.from_env()
         self.graph = self._build_graph()
+
+    def _process_query(self, state):
+        checker = getattr(self.llm, "complete_json", self.llm.complete)
+        raw = checker(QUERY_CHECK.format(question=state["question"]))
+        try:
+            assessment = json.loads(raw)
+            if not isinstance(assessment.get("needs_clarification"), bool):
+                raise ValueError("needs_clarification must be a boolean")
+            if not isinstance(assessment.get("clarification_question"), str):
+                raise ValueError("clarification_question must be a string")
+        except (ValueError, TypeError, AttributeError) as exc:
+            raise ValueError(f"Invalid query assessment: {exc}") from exc
+        return {"query_assessment": assessment}
+
+    def _clarify(self, state):
+        question = state["query_assessment"]["clarification_question"].strip()
+        return {"route": "CLARIFY",
+                "answer": question[:250] or "Which topic or document do you mean?"}
 
     def _retrieve(self, state):
         return {"local_evidence": local_chunks(self.retrieve(state["question"], self.settings.top_k))}
@@ -175,12 +167,20 @@ class CRAGPipeline:
 
     def _build_graph(self):
         graph = StateGraph(CRAGState)
-        for name, node in [("retrieve", self._retrieve), ("evaluate", self._evaluate),
+        for name, node in [("process_query", self._process_query),
+                           ("clarify", self._clarify),
+                           ("retrieve", self._retrieve), ("evaluate", self._evaluate),
                            ("rewrite", self._rewrite), ("web", self._web),
                            ("prepare_local", self._prepare_local),
                            ("prepare_web", self._prepare_web), ("generate", self._generate)]:
             graph.add_node(name, node)
-        graph.add_edge(START, "retrieve")
+        graph.add_edge(START, "process_query")
+        graph.add_conditional_edges(
+            "process_query",
+            lambda state: "clarify" if state["query_assessment"]["needs_clarification"] else "retrieve",
+            {"clarify": "clarify", "retrieve": "retrieve"},
+        )
+        graph.add_edge("clarify", END)
         graph.add_edge("retrieve", "evaluate")
         graph.add_conditional_edges("evaluate", lambda state: state["route"],
                                     {"LOCAL": "prepare_local", "WEB": "web",
@@ -196,13 +196,10 @@ class CRAGPipeline:
         question = question.strip()
         if not question:
             raise ValueError("Question must not be empty")
-        clarification = clarification_result(question)
-        if clarification:
-            return clarification
         started = time.perf_counter()
         result = self.graph.invoke({"question": question})
         return {"question": question, "answer": result["answer"], "route": result["route"],
-                "evaluation": result["evaluation"],
+                "evaluation": result.get("evaluation"),
                 "rewritten_query": result.get("rewritten_query"),
                 "retrieved_documents": result.get("local_evidence", []),
                 "sources": [{key: value for key, value in item.items() if key != "text"}

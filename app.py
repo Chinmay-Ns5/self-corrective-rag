@@ -5,7 +5,6 @@ from typing import Any
 import streamlit as st
 
 from src.crag.service import make_pipeline
-from src.crag.pipeline import clarification_result
 from src.crag.settings import Settings
 
 
@@ -23,9 +22,6 @@ def get_pipeline(settings: Settings):
 
 
 def run_crag_query(question: str) -> dict[str, Any]:
-    clarification = clarification_result(question)
-    if clarification:
-        return clarification
     return get_pipeline(Settings.from_env()).ask(question)
 
 

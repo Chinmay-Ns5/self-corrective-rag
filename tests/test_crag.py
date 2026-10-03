@@ -14,6 +14,8 @@ class FakeLLM:
         self.score = score
 
     def complete(self, prompt):
+        if "Return ONLY JSON with keys needs_clarification" in prompt:
+            return json.dumps({"needs_clarification": False, "clarification_question": ""})
         if "Return ONLY JSON with keys score" in prompt:
             return json.dumps({"score": self.score, "reason": "test", "evidence_ids": ["L1"]})
         if "Rewrite this question" in prompt:
@@ -52,10 +54,19 @@ class VerboseRewriter(FakeLLM):
         return super().complete(prompt)
 
 
+class AmbiguityLLM(FakeLLM):
+    def complete(self, prompt):
+        if "Return ONLY JSON with keys needs_clarification" in prompt:
+            return json.dumps({"needs_clarification": True,
+                               "clarification_question": "Which topic or document do you mean?"})
+        return super().complete(prompt)
+
+
 class FakeJSONLLM(FakeLLM):
     def complete_json(self, prompt):
         raw = self.complete(prompt)
-        if "Return ONLY JSON with keys score" in prompt:
+        if "Return ONLY JSON with keys score" in prompt or \
+                "Return ONLY JSON with keys needs_clarification" in prompt:
             return raw
         return json.dumps({"answer": raw})
 
@@ -133,15 +144,27 @@ class PipelineTests(unittest.TestCase):
             self.fail("A vague question must not search unrelated PDFs")
 
         web = FakeWeb()
-        pipeline = CRAGPipeline(unexpected_retrieval, FakeLLM(0.9), web, self.settings)
+        pipeline = CRAGPipeline(unexpected_retrieval, AmbiguityLLM(0.9), web, self.settings)
         for question in ("What is this about?", "Summarize this paper."):
             with self.subTest(question=question):
                 result = pipeline.ask(question)
                 self.assertEqual(result["route"], "CLARIFY")
-                self.assertIn("name the topic or document", result["answer"])
+                self.assertIn("topic or document", result["answer"])
                 self.assertIsNone(result["evaluation"])
                 self.assertEqual(result["sources"], [])
         self.assertEqual(web.queries, [])
+
+    def test_invalid_query_assessment_fails_before_retrieval(self):
+        class InvalidChecker(FakeLLM):
+            def complete(self, prompt):
+                if "Return ONLY JSON with keys needs_clarification" in prompt:
+                    return '{"needs_clarification": "maybe", "clarification_question": ""}'
+                return super().complete(prompt)
+
+        pipeline = CRAGPipeline(lambda question, top_k: self.fail("retrieval was called"),
+                                InvalidChecker(0.9), FakeWeb(), self.settings)
+        with self.assertRaisesRegex(ValueError, "Invalid query assessment"):
+            pipeline.ask("What is DPR?")
 
 
 class SettingsTests(unittest.TestCase):

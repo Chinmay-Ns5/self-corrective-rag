@@ -28,7 +28,7 @@ Start [Ollama](https://ollama.com/) and install the default model with `ollama p
 
 The CLI writes one JSON result to stdout and startup logs to stderr. For a local question, `route` is `LOCAL`; partial evidence selects `WEB`; irrelevant or absent evidence selects `REWRITE_AND_WEB`. The initial grade thresholds are 0.40 and 0.75. They are configuration defaults, not validated accuracy claims.
 
-The form has no previous document or conversation context. Questions such as “What is this about?” return a `CLARIFY` request for a topic or document name immediately. For example, ask “What is dense passage retrieval?” to search the PDF corpus. Web routes require `TAVILY_API_KEY`; add it to `.env` and click **Reload backend**.
+The form has no previous document or conversation context. Before retrieval, the LLM checks whether a question identifies a clear subject. If it needs an unnamed topic or document, the app returns `CLARIFY` with a follow-up question. This adds one model call per question. For example, ask “What is dense passage retrieval?” to search the PDF corpus. Web routes require `TAVILY_API_KEY`; add it to `.env` and click **Reload backend**.
 
 Ollama requests use a bounded 4,096-token context and at most 512 generated tokens so the model does not allocate a large default context on a laptop.
 
