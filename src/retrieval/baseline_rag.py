@@ -31,9 +31,6 @@ from src.retrieval.retriever import (
 
 TOP_K = 5
 
-OLLAMA_MODEL = "llama3.2"
-
-
 # ============================================================
 # Baseline RAG Prompt
 # ============================================================
@@ -75,27 +72,11 @@ def generate_answer(prompt):
 
     try:
 
-        import ollama
+        from src.crag.llm import OllamaLLM
+        from src.crag.settings import Settings
 
-        response = ollama.chat(
-            model=OLLAMA_MODEL,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
-        )
-
-        return response["message"]["content"]
-
-    except ImportError:
-
-        return (
-            "Ollama Python package is not installed.\n\n"
-            "Install it using:\n"
-            "pip install ollama"
-        )
+        settings = Settings.from_env()
+        return OllamaLLM(settings.ollama_model, settings.ollama_url).complete(prompt)
 
     except Exception as e:
 

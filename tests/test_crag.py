@@ -10,7 +10,7 @@ class FakeLLM:
         self.score = score
 
     def complete(self, prompt):
-        if "Return ONLY JSON" in prompt:
+        if "Return ONLY JSON with keys score" in prompt:
             return json.dumps({"score": self.score, "reason": "test", "evidence_ids": ["L1"]})
         if "Rewrite this question" in prompt:
             return "rewritten test query"
@@ -36,9 +36,24 @@ class BrokenWeb:
 
 class MalformedGrader(FakeLLM):
     def complete(self, prompt):
-        if "Return ONLY JSON" in prompt:
+        if "Return ONLY JSON with keys score" in prompt:
             return "invalid grade"
         return super().complete(prompt)
+
+
+class VerboseRewriter(FakeLLM):
+    def complete(self, prompt):
+        if "Rewrite this question" in prompt:
+            return "Here are my steps:\nPreserve the question, then perform a search."
+        return super().complete(prompt)
+
+
+class FakeJSONLLM(FakeLLM):
+    def complete_json(self, prompt):
+        raw = self.complete(prompt)
+        if "Return ONLY JSON with keys score" in prompt:
+            return raw
+        return json.dumps({"answer": raw})
 
 
 class PipelineTests(unittest.TestCase):
@@ -94,6 +109,20 @@ class PipelineTests(unittest.TestCase):
         result = pipeline.ask("test question")
         self.assertEqual(result["route"], "REWRITE_AND_WEB")
         self.assertIn("Grader failed", result["evaluation"]["reason"])
+
+    def test_verbose_rewrite_preserves_original_search_query(self):
+        web = FakeWeb()
+        pipeline = CRAGPipeline(lambda question, top_k: self.results,
+                                VerboseRewriter(0.1), web, self.settings)
+        pipeline.ask("test question")
+        self.assertEqual(web.queries, ["test question"])
+
+    def test_structured_answer_is_unwrapped_for_the_ui(self):
+        pipeline = CRAGPipeline(lambda question, top_k: self.results,
+                                FakeJSONLLM(0.9), FakeWeb(), self.settings)
+        result = pipeline.ask("test question")
+        self.assertEqual(result["answer"], "Answer from PDF. [L1]")
+        self.assertEqual(result["error"], "")
 
 
 if __name__ == "__main__":

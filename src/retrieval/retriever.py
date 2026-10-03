@@ -35,13 +35,18 @@ def load_vector_database():
     Load the existing persistent ChromaDB vector database.
     """
 
+    if not os.path.isfile(os.path.join(VECTORSTORE_PATH, "chroma.sqlite3")):
+        raise RuntimeError("Local vector database is missing. Run 'python -m scripts.ingest' first.")
     client = chromadb.PersistentClient(
         path=VECTORSTORE_PATH
     )
 
-    collection = client.get_collection(
-        name=COLLECTION_NAME
-    )
+    try:
+        collection = client.get_collection(name=COLLECTION_NAME)
+    except chromadb.errors.NotFoundError as exc:
+        raise RuntimeError("CRAG collection is missing. Run 'python -m scripts.ingest' first.") from exc
+    if not collection.count():
+        raise RuntimeError("CRAG collection is empty. Add PDFs and run 'python -m scripts.ingest'.")
 
     print("=" * 50)
     print("Vector database loaded")
@@ -81,6 +86,11 @@ def retrieve(query, collection, embedding_model, top_k=TOP_K):
     Retrieve the top-K most relevant chunks for a query.
     """
 
+    if top_k < 1:
+        raise ValueError("top_k must be positive")
+    count = collection.count()
+    if count == 0:
+        return {"documents": [[]], "metadatas": [[]], "distances": [[]]}
     # Convert query into embedding
     query_embedding = embedding_model.encode(
         query
@@ -89,7 +99,7 @@ def retrieve(query, collection, embedding_model, top_k=TOP_K):
     # Search ChromaDB
     results = collection.query(
         query_embeddings=[query_embedding],
-        n_results=top_k
+        n_results=min(top_k, count)
     )
 
     return results

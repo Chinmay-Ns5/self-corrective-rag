@@ -1,12 +1,11 @@
-"""Streamlit interface for the Self-Corrective RAG project.
-
-The query adapter is intentionally isolated. Connect it to
-``pipeline.ask(question)`` when the live backend integration is ready.
-"""
+"""Streamlit interface connected to the shared CRAG backend."""
 
 from typing import Any
 
 import streamlit as st
+
+from src.crag.service import make_pipeline
+from src.crag.settings import Settings
 
 
 ROUTE_DETAILS = {
@@ -16,12 +15,14 @@ ROUTE_DETAILS = {
 }
 
 
+@st.cache_resource(show_spinner=False)
+def get_pipeline(settings: Settings):
+    """Reuse the embedding model and database across Streamlit reruns."""
+    return make_pipeline(settings)
+
+
 def run_crag_query(question: str) -> dict[str, Any]:
-    """Isolated adapter for the eventual ``pipeline.ask(question)`` call."""
-    raise RuntimeError(
-        "Live CRAG backend integration is not connected yet. "
-        "This UI is ready to connect to the Python CRAG pipeline."
-    )
+    return get_pipeline(Settings.from_env()).ask(question)
 
 
 def render_sidebar() -> dict[str, bool]:
@@ -35,10 +36,18 @@ def render_sidebar() -> dict[str, bool]:
         }
         st.divider()
         st.subheader("System Status")
-        st.info("UI ready · Live backend not connected")
-        st.caption(
-            "Connect the query adapter to the CRAG pipeline to enable live questions."
-        )
+        settings = Settings.from_env()
+        st.info(f"Model: {settings.ollama_model}")
+        st.caption("Backend connected. Resources load on your first question.")
+        if settings.tavily_key:
+            st.caption("Web fallback is configured.")
+        else:
+            st.caption("Set TAVILY_API_KEY in .env to enable web fallback.")
+        if st.button("Reload backend"):
+            get_pipeline.clear()
+            st.session_state.pop("crag_result", None)
+            st.session_state.pop("crag_error", None)
+            st.success("The backend will reload on your next question.")
         return controls
 
 
@@ -71,8 +80,8 @@ def render_error(error: str) -> None:
     st.info(error)
     if "vector" in error.lower() or "collection" in error.lower():
         st.caption(
-            "If the live backend is connected, add PDFs under data/raw/pdfs/ "
-            "and build the chunks and vector database before querying."
+            "Add PDFs under data/raw/pdfs/ and run python -m scripts.ingest, "
+            "then click Reload backend."
         )
 
 
@@ -110,7 +119,9 @@ def render_retrieval_analysis(result: dict[str, Any], controls: dict[str, bool])
             evidence_ids = evaluation.get("evidence_ids") or []
             st.write("**Evidence IDs**")
             st.write(", ".join(map(str, evidence_ids)) if evidence_ids else "No evidence IDs were returned.")
-            st.caption("Retrieved chunk text is not currently exposed by the backend.")
+            for item in result.get("retrieved_documents", []):
+                st.write(f"[{item['id']}] {item['source']} · Page {item['page']}")
+                st.text(item["text"])
 
 
 def render_rewritten_query(result: dict[str, Any]) -> None:
@@ -176,14 +187,19 @@ def render_result(result: dict[str, Any], controls: dict[str, bool]) -> None:
 
 def main() -> None:
     st.set_page_config(page_title="Self-Corrective RAG", page_icon="↻", layout="wide")
-    controls = render_sidebar()
+    try:
+        controls = render_sidebar()
+    except ValueError as exc:
+        st.error(f"Invalid configuration: {exc}")
+        st.caption("Check the model and routing settings in .env, then rerun the app.")
+        st.stop()
 
     st.title("Self-Corrective RAG")
     st.markdown(
         "Retrieval-Augmented Generation with adaptive routing, relevance grading, "
         "and corrective web fallback."
     )
-    st.caption("Academic project dashboard · UI integration in progress")
+    st.caption("Academic project dashboard · Local retrieval with corrective web fallback")
     render_query_input()
 
     if st.session_state.get("crag_error"):

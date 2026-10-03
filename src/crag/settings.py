@@ -1,5 +1,10 @@
 from dataclasses import dataclass
 import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 
 @dataclass(frozen=True)
@@ -13,6 +18,7 @@ class Settings:
 
     @classmethod
     def from_env(cls):
+        load_dotenv(PROJECT_ROOT / ".env", override=False)
         settings = cls(
             high_threshold=float(os.getenv("CRAG_HIGH_THRESHOLD", "0.75")),
             low_threshold=float(os.getenv("CRAG_LOW_THRESHOLD", "0.40")),

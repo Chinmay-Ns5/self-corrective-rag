@@ -25,9 +25,15 @@ class CRAGState(TypedDict, total=False):
 def local_chunks(results):
     documents = results.get("documents", [[]])[0]
     metadata = results.get("metadatas", [[]])[0]
-    return [{"id": f"L{i}", "text": text, "source": (metadata[i - 1] or {}).get("source", "unknown"),
-             "page": (metadata[i - 1] or {}).get("page", 0)}
-            for i, text in enumerate(documents, start=1) if text.strip()]
+    chunks = []
+    for i, text in enumerate(documents, start=1):
+        if not text or not text.strip():
+            continue
+        item_metadata = (metadata[i - 1] or {}) if i <= len(metadata) else {}
+        chunks.append({"id": f"L{i}", "text": text,
+                       "source": item_metadata.get("source", "unknown"),
+                       "page": item_metadata.get("page", 0)})
+    return chunks
 
 
 def format_evidence(items, max_chars=1200):
@@ -79,8 +85,9 @@ class CRAGPipeline:
             grade = {"score": 0.0, "reason": "No local documents found", "evidence_ids": []}
         else:
             try:
-                raw = self.llm.complete(GRADER.format(question=state["question"],
-                                                      evidence=format_evidence(chunks)))
+                grader = getattr(self.llm, "complete_json", self.llm.complete)
+                raw = grader(GRADER.format(question=state["question"],
+                                          evidence=format_evidence(chunks)))
                 grade = parse_grade(raw, {item["id"] for item in chunks})
                 # A high grade without any cited excerpt is not trusted.
                 if grade["score"] >= self.settings.high_threshold and not grade["evidence_ids"]:
@@ -92,7 +99,9 @@ class CRAGPipeline:
     def _rewrite(self, state):
         try:
             query = self.llm.complete(REWRITER.format(question=state["question"])).strip().strip('"')
-            return {"rewritten_query": query[:300] or state["question"]}
+            if not query or "\n" in query or len(query) > 300:
+                query = state["question"]
+            return {"rewritten_query": query}
         except Exception:
             return {"rewritten_query": state["question"]}
 
@@ -118,8 +127,14 @@ class CRAGPipeline:
         if not evidence:
             return {"answer": "I could not verify an answer from the available evidence."}
         try:
-            answer = self.llm.complete(GENERATOR.format(
-                question=state["question"], evidence=format_evidence(evidence)))
+            prompt = GENERATOR.format(question=state["question"], evidence=format_evidence(evidence))
+            if hasattr(self.llm, "complete_json"):
+                response = json.loads(self.llm.complete_json(prompt))
+                answer = response["answer"]
+                if not isinstance(answer, str):
+                    raise ValueError("answer must be a string")
+            else:
+                answer = self.llm.complete(prompt)
             if not answer:
                 raise ValueError("empty response")
             valid_ids = {item["id"] for item in evidence}
@@ -159,6 +174,7 @@ class CRAGPipeline:
         return {"question": question, "answer": result["answer"], "route": result["route"],
                 "evaluation": result["evaluation"],
                 "rewritten_query": result.get("rewritten_query"),
+                "retrieved_documents": result.get("local_evidence", []),
                 "sources": [{key: value for key, value in item.items() if key != "text"}
                             for item in result.get("evidence", [])],
                 "latency_seconds": round(time.perf_counter() - started, 3),
