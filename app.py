@@ -5,6 +5,7 @@ from typing import Any
 import streamlit as st
 
 from src.crag.service import make_pipeline
+from src.crag.pipeline import clarification_result
 from src.crag.settings import Settings
 
 
@@ -22,6 +23,9 @@ def get_pipeline(settings: Settings):
 
 
 def run_crag_query(question: str) -> dict[str, Any]:
+    clarification = clarification_result(question)
+    if clarification:
+        return clarification
     return get_pipeline(Settings.from_env()).ask(question)
 
 
@@ -78,6 +82,8 @@ def render_query_input() -> None:
 def render_error(error: str) -> None:
     st.error("The query could not be completed.")
     st.info(error)
+    if "TAVILY_API_KEY" in error:
+        st.caption("Add TAVILY_API_KEY to .env and click Reload backend to enable web search.")
     if "vector" in error.lower() or "collection" in error.lower():
         st.caption(
             "Add PDFs under data/raw/pdfs/ and run python -m scripts.ingest, "
@@ -170,6 +176,10 @@ def render_result(result: dict[str, Any], controls: dict[str, bool]) -> None:
     if question:
         st.markdown("#### Question")
         st.write(question)
+
+    if result.get("route") == "CLARIFY":
+        st.info(result["answer"])
+        return
 
     render_retrieval_analysis(result, controls)
     render_rewritten_query(result)

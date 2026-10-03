@@ -22,6 +22,33 @@ class CRAGState(TypedDict, total=False):
     error: str
 
 
+_UNRESOLVED_REFERENCE = re.compile(
+    r"^(?:what (?:is|was) (?:this|that|it)(?: (?:paper|article|document))?(?: about)?|"
+    r"what (?:does|did) (?:this|that|it) mean|"
+    r"(?:tell me about|explain|summari[sz]e) (?:this|that|it)(?: (?:paper|article|document))?)$",
+    re.IGNORECASE,
+)
+
+
+def clarification_result(question):
+    """Ask for the missing referent before loading models or searching the web."""
+    normalized = re.sub(r"\s+", " ", question.strip().rstrip("?.! "))
+    if not _UNRESOLVED_REFERENCE.fullmatch(normalized):
+        return None
+    return {
+        "question": question.strip(),
+        "answer": ("Please name the topic or document you want me to explain. "
+                   "For example: 'What is dense passage retrieval?'"),
+        "route": "CLARIFY",
+        "evaluation": None,
+        "rewritten_query": None,
+        "retrieved_documents": [],
+        "sources": [],
+        "latency_seconds": 0.0,
+        "error": "",
+    }
+
+
 def local_chunks(results):
     documents = results.get("documents", [[]])[0]
     metadata = results.get("metadatas", [[]])[0]
@@ -169,6 +196,9 @@ class CRAGPipeline:
         question = question.strip()
         if not question:
             raise ValueError("Question must not be empty")
+        clarification = clarification_result(question)
+        if clarification:
+            return clarification
         started = time.perf_counter()
         result = self.graph.invoke({"question": question})
         return {"question": question, "answer": result["answer"], "route": result["route"],

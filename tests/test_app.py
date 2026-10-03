@@ -66,6 +66,32 @@ class AppIntegrationTests(unittest.TestCase):
             self.assertGreater(len(app.warning), 0)
             factory.assert_not_called()
 
+    def test_vague_question_asks_for_context_without_loading_backend(self):
+        with patch("src.crag.service.make_pipeline") as factory:
+            app = AppTest.from_file(str(APP), default_timeout=20).run()
+            self.submit(app, "What is this about?")
+            self.assertEqual(len(app.exception), 0)
+            self.assertEqual(app.session_state["crag_result"]["route"], "CLARIFY")
+            self.assertTrue(any("name the topic or document" in item.value for item in app.info))
+            self.assertEqual(len(app.metric), 0)
+            factory.assert_not_called()
+
+    def test_missing_tavily_key_shows_setup_step(self):
+        class MissingKeyWeb:
+            def search(self, query):
+                raise RuntimeError("TAVILY_API_KEY is required for web fallback")
+
+        pipeline = CRAGPipeline(
+            lambda question, top_k: {"documents": [["Partial evidence"]],
+                                      "metadatas": [[{"source": "paper.pdf", "page": 1}]]},
+            FakeLLM(0.5), MissingKeyWeb(), Settings(),
+        )
+        with patch("src.crag.service.make_pipeline", return_value=pipeline):
+            app = AppTest.from_file(str(APP), default_timeout=20).run()
+            self.submit(app, "A specific topic")
+            self.assertEqual(len(app.exception), 0)
+            self.assertTrue(any("Reload backend" in item.value for item in app.caption))
+
     def test_invalid_configuration_is_displayed(self):
         with patch.dict(os.environ, {"CRAG_HIGH_THRESHOLD": "0.1"}):
             app = AppTest.from_file(str(APP), default_timeout=20).run()

@@ -1,5 +1,9 @@
 import json
+import os
+from pathlib import Path
+import tempfile
 import unittest
+from unittest.mock import patch
 
 from src.crag.pipeline import CRAGPipeline, choose_route, parse_grade
 from src.crag.settings import Settings
@@ -123,6 +127,34 @@ class PipelineTests(unittest.TestCase):
         result = pipeline.ask("test question")
         self.assertEqual(result["answer"], "Answer from PDF. [L1]")
         self.assertEqual(result["error"], "")
+
+    def test_question_without_a_referent_requests_clarification(self):
+        def unexpected_retrieval(question, top_k):
+            self.fail("A vague question must not search unrelated PDFs")
+
+        web = FakeWeb()
+        pipeline = CRAGPipeline(unexpected_retrieval, FakeLLM(0.9), web, self.settings)
+        for question in ("What is this about?", "Summarize this paper."):
+            with self.subTest(question=question):
+                result = pipeline.ask(question)
+                self.assertEqual(result["route"], "CLARIFY")
+                self.assertIn("name the topic or document", result["answer"])
+                self.assertIsNone(result["evaluation"])
+                self.assertEqual(result["sources"], [])
+        self.assertEqual(web.queries, [])
+
+
+class SettingsTests(unittest.TestCase):
+    def test_tavily_key_edit_is_visible_without_restarting(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            env_file = Path(temp_dir) / ".env"
+            with patch("src.crag.settings.PROJECT_ROOT", Path(temp_dir)), \
+                    patch.dict(os.environ, {"TAVILY_API_KEY": ""}):
+                env_file.write_text("TAVILY_API_KEY=\n", encoding="utf-8")
+                self.assertEqual(Settings.from_env().tavily_key, "")
+                env_file.write_text("TAVILY_API_KEY=test-key\n", encoding="utf-8")
+                self.assertEqual(Settings.from_env().tavily_key, "test-key")
+                self.assertEqual(os.environ["TAVILY_API_KEY"], "")
 
 
 if __name__ == "__main__":
