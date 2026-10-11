@@ -62,4 +62,4 @@ The grader's scores require calibration against labeled questions before making 
 
 For a repeatable baseline-versus-CRAG run, use `python -m scripts.evaluate --offline` with Ollama and Tavily configured. The 50-question dataset, review rubric, and output instructions are in [evaluation/README.md](evaluation/README.md). Human-reviewed correctness and groundedness are kept separate from automatic routing and latency measurements.
 
-The first 50-question run and its limitations are recorded in [evaluation/initial_findings.md](evaluation/initial_findings.md).
+The completed 50-question, human-reviewed run, its results, and limitations are recorded in [evaluation/final_findings_20261011.md](evaluation/final_findings_20261011.md). The earlier pre-fix snapshot remains in [evaluation/initial_findings.md](evaluation/initial_findings.md).

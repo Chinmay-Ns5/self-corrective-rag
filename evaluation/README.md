@@ -1,5 +1,9 @@
 # Baseline versus CRAG evaluation
 
+The completed 2026-10-11 evaluation, including reviewed scores and known failures, is in
+[`final_findings_20261011.md`](final_findings_20261011.md). Its compact per-question
+labels are in [`review_20261011.csv`](review_20261011.csv).
+
 `questions.jsonl` contains 50 labeled questions: 20 local, 15 outside the PDF corpus,
 5 with partial local evidence, 5 lacking a referent, and 5 requiring current information.
 The expected route is `LOCAL`, `CLARIFY`, or `WEB_ANY` (`WEB` or `REWRITE_AND_WEB`).

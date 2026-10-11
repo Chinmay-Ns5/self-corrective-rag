@@ -174,6 +174,57 @@ class PipelineTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Invalid query assessment"):
             pipeline.ask("What is DPR?")
 
+    def test_comparison_requires_evidence_for_both_named_subjects(self):
+        class ComparisonWeb(FakeWeb):
+            def search(self, query):
+                self.queries.append(query)
+                return [{"id": "W1", "title": "Method-A", "url": "https://example.com/a",
+                         "text": "Method-A uses a sparse encoder.", "score": 0.9}]
+
+        excerpts = {"documents": [["Method-B uses a dense encoder."]],
+                    "metadatas": [[{"source": "method_b.pdf", "page": 1}]]}
+        for question in ("How does Method-A differ from Method-B?",
+                         "How does Method-A choose retrieval compared with Method-B?"):
+            with self.subTest(question=question):
+                web = ComparisonWeb()
+                pipeline = CRAGPipeline(lambda q, k: excerpts, FakeLLM(0.9),
+                                        web, self.settings)
+                result = pipeline.ask(question)
+                self.assertEqual(result["route"], "WEB")
+                self.assertIn("Method-A", result["evaluation"]["reason"])
+                self.assertEqual({item["id"] for item in result["sources"]}, {"L1", "W1"})
+                self.assertEqual(web.queries, ["Method-A versus Method-B differences"])
+
+    def test_comparison_abstains_when_web_lacks_missing_subject(self):
+        excerpts = {"documents": [["Method-B uses a dense encoder."]],
+                    "metadatas": [[{"source": "method_b.pdf", "page": 1}]]}
+        pipeline = CRAGPipeline(lambda q, k: excerpts, FakeLLM(0.9),
+                                FakeWeb(), self.settings)
+        result = pipeline.ask("How does Method-A differ from Method-B?")
+        self.assertEqual(result["route"], "WEB")
+        self.assertIn("could not verify", result["answer"])
+        self.assertEqual(result["sources"], [])
+        self.assertIn("Method-A", result["error"])
+
+    def test_invalid_generated_citation_gets_one_repair_attempt(self):
+        class RecoveringLLM(FakeLLM):
+            def __init__(self):
+                super().__init__(0.9)
+                self.attempts = 0
+
+            def complete(self, prompt):
+                if "Answer the question using ONLY the evidence below" in prompt:
+                    self.attempts += 1
+                    return "Answer [L99]" if self.attempts == 1 else "Answer [L1]"
+                return super().complete(prompt)
+
+        llm = RecoveringLLM()
+        pipeline = CRAGPipeline(lambda q, k: self.results, llm, FakeWeb(), self.settings)
+        result = pipeline.ask("What is the answer in the PDF?")
+        self.assertEqual(result["answer"], "Answer [L1]")
+        self.assertEqual(result["error"], "")
+        self.assertEqual(llm.attempts, 2)
+
     def test_injected_pdf_cannot_make_grader_trust_a_fake_evidence_id(self):
         class InjectedGradeLLM(FakeLLM):
             def complete(self, prompt):

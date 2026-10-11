@@ -1,0 +1,51 @@
+id,category,gold_route,baseline_correct,baseline_grounded,crag_route,crag_correct,crag_grounded,notes
+L01,local,LOCAL,0,1,LOCAL,1,1,Checked answer against the dataset reference and recorded source metadata.
+L02,local,LOCAL,0,1,LOCAL,1,1,Baseline explains RAG-Token but omits the defining RAG-Sequence behavior.
+L03,local,LOCAL,0,1,WEB,1,1,Survey abstract in retrieved L1 states hallucination and outdated knowledge; CRAG used web unnecessarily.
+L04,local,LOCAL,1,1,LOCAL,0,1,"CRAG cites valid survey excerpts after retry but describes benefits, not the external knowledge being added."
+L05,local,LOCAL,0,1,LOCAL,1,1,Checked answer against the dataset reference and recorded source metadata.
+L06,local,LOCAL,1,1,LOCAL,1,1,Checked answer against the dataset reference and recorded source metadata.
+L07,local,LOCAL,1,1,LOCAL,1,1,Checked answer against the dataset reference and recorded source metadata.
+L08,local,LOCAL,0,0,LOCAL,1,1,Baseline confuses cosine similarity with Spearman correlation used for evaluation.
+L09,local,LOCAL,0,1,LOCAL,1,1,Checked answer against the dataset reference and recorded source metadata.
+L10,local,LOCAL,0,1,LOCAL,0,1,"BM25/Lucene appear in retrieved L1-L2, but CRAG answers only generic sparse methods."
+L11,local,LOCAL,0,1,LOCAL,1,1,Checked answer against the dataset reference and recorded source metadata.
+L12,local,LOCAL,1,1,LOCAL,0,0,CRAG incorrectly describes Peters et al. as only right-to-left; the BERT paper describes a shallow combination of both directions.
+L13,local,LOCAL,1,1,LOCAL,1,1,Checked answer against the dataset reference and recorded source metadata.
+L14,local,LOCAL,0,0,LOCAL,1,1,"Baseline attributes planning to actions, whereas the ReAct paper attributes plan management to reasoning traces."
+L15,local,LOCAL,1,1,WEB,1,1,Retrieved Self-RAG title and abstract answer the question; CRAG unnecessarily used web.
+L16,local,LOCAL,0,1,LOCAL,1,1,Checked answer against the dataset reference and recorded source metadata.
+L17,local,LOCAL,0,1,LOCAL,1,1,Checked answer against the dataset reference and recorded source metadata.
+L18,local,LOCAL,0,1,LOCAL,1,1,Citation repair produced a grounded answer about web search from the corrective RAG paper.
+L19,local,LOCAL,1,1,LOCAL,1,1,Checked answer against the dataset reference and recorded source metadata.
+L20,local,WEB,0,1,WEB,1,1,"Retrieved excerpts are mostly BERT, with only incomplete ColBERT context; web fallback is justified."
+W01,web_only,REWRITE_AND_WEB,0,1,REWRITE_AND_WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+W02,web_only,REWRITE_AND_WEB,0,1,REWRITE_AND_WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+W03,web_only,REWRITE_AND_WEB,0,1,REWRITE_AND_WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+W04,web_only,REWRITE_AND_WEB,0,1,WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+W05,web_only,REWRITE_AND_WEB,0,1,WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+W06,web_only,REWRITE_AND_WEB,0,1,REWRITE_AND_WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+W07,web_only,REWRITE_AND_WEB,0,1,REWRITE_AND_WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+W08,web_only,REWRITE_AND_WEB,0,1,REWRITE_AND_WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+W09,web_only,REWRITE_AND_WEB,0,1,WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+W10,web_only,REWRITE_AND_WEB,0,1,WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+W11,web_only,REWRITE_AND_WEB,0,1,WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+W12,web_only,REWRITE_AND_WEB,0,1,REWRITE_AND_WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+W13,web_only,REWRITE_AND_WEB,0,1,WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+W14,web_only,REWRITE_AND_WEB,0,1,REWRITE_AND_WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+W15,web_only,REWRITE_AND_WEB,0,1,REWRITE_AND_WEB,1,1,Checked answer against the dataset reference and recorded source metadata.
+P01,partial_evidence,WEB,0,1,WEB,1,1,ColBERTv2 compression and denoised supervision checked against the ColBERTv2 paper.
+P02,partial_evidence,WEB,0,1,WEB,0,0,Answer conflates base Contriever with MultiContrievers social-bias findings from a different study.
+P03,partial_evidence,WEB,0,1,WEB,1,1,Key DeBERTa differences checked against DeBERTa documentation and paper; extra benchmark detail is peripheral.
+P04,partial_evidence,WEB,0,1,WEB,0,1,"Web search did not return usable RAGAS evidence, so CRAG abstained. This is safe but does not answer the question."
+P05,partial_evidence,WEB,0,1,WEB,0,0,"Core contrast is present, but unsupported domain/confidence criteria are added to Adaptive-RAG."
+A01,unclear_reference,CLARIFY,0,1,CLARIFY,1,1,Checked answer against the dataset reference and recorded source metadata.
+A02,unclear_reference,CLARIFY,0,1,CLARIFY,1,1,Checked answer against the dataset reference and recorded source metadata.
+A03,unclear_reference,CLARIFY,0,1,CLARIFY,1,1,Checked answer against the dataset reference and recorded source metadata.
+A04,unclear_reference,CLARIFY,0,1,CLARIFY,1,1,Checked answer against the dataset reference and recorded source metadata.
+A05,unclear_reference,CLARIFY,0,1,CLARIFY,1,1,Checked answer against the dataset reference and recorded source metadata.
+F01,freshness,REWRITE_AND_WEB,0,1,WEB,1,1,"Python 3.15.0 released 2026-10-09, checked at https://www.python.org/downloads/release/python-3150/"
+F02,freshness,REWRITE_AND_WEB,0,1,REWRITE_AND_WEB,1,1,Ant?nio Guterres checked at https://www.un.org/sg/en/about-secretary-general
+F03,freshness,REWRITE_AND_WEB,0,1,REWRITE_AND_WEB,1,1,Lula da Silva checked against Brazilian presidency and current election coverage on 2026-10-11.
+F04,freshness,REWRITE_AND_WEB,0,1,REWRITE_AND_WEB,1,1,Francis Halzen checked against 2026 Nobel Physics announcement and NSF notice.
+F05,freshness,REWRITE_AND_WEB,0,1,WEB,1,1,Streamlit 1.65.0 checked at https://github.com/streamlit/streamlit/releases/tag/1.65.0

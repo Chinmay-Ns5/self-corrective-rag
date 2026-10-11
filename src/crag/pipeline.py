@@ -89,6 +89,34 @@ def choose_route(score, settings):
     return "REWRITE_AND_WEB"
 
 
+def comparison_subjects(question):
+    """Find explicitly named sides of common comparison questions."""
+    question = question.strip().rstrip("?. ")
+    patterns = (
+        r"^How (?:does|do) (.+?) differ from (.+)$",
+        r"^How (?:does|do) ([\w.-]+)\s+.+? compared (?:with|to) (.+)$",
+    )
+    for pattern in patterns:
+        match = re.match(pattern, question, re.IGNORECASE)
+        if match:
+            return tuple(re.sub(r"^(?:(?:the|original)\s+)+", "", value.strip(), flags=re.IGNORECASE)
+                         for value in match.groups())
+    return ()
+
+
+def mentions_subject(text, subject):
+    """Require an entity name as a separate term, not inside another name."""
+    parts = re.findall(r"\w+", subject)
+    if not parts:
+        return False
+    pattern = r"(?<!\w)" + r"[\s-]+".join(map(re.escape, parts)) + r"(?!\w)"
+    if re.search(pattern, text, re.IGNORECASE):
+        return True
+    return len(parts) > 1 and all(len(part) >= 3 and re.search(
+        r"(?<!\w)" + re.escape(part) + r"(?!\w)", text, re.IGNORECASE)
+        for part in parts)
+
+
 class CRAGPipeline:
     def __init__(self, retrieve, llm, web, settings=None):
         self.retrieve = retrieve
@@ -128,6 +156,14 @@ class CRAGPipeline:
                 raw = grader(GRADER.format(question=state["question"],
                                           evidence=format_evidence(chunks)))
                 grade = parse_grade(raw, {item["id"] for item in chunks})
+                subjects = comparison_subjects(state["question"])
+                if grade["score"] >= self.settings.high_threshold and subjects:
+                    missing = [subject for subject in subjects if not any(
+                        mentions_subject(item["text"], subject) for item in chunks)]
+                    if missing:
+                        grade = {**grade, "score": self.settings.low_threshold,
+                                 "reason": "Retrieved excerpts do not mention every compared subject: "
+                                           + ", ".join(missing)}
                 # A high grade without any cited excerpt is not trusted.
                 if grade["score"] >= self.settings.high_threshold and not grade["evidence_ids"]:
                     grade = {**grade, "score": self.settings.low_threshold}
@@ -149,8 +185,21 @@ class CRAGPipeline:
     def _web(self, state):
         from src.crag.web import refine_web
         query = state.get("rewritten_query") or state["question"]
+        subjects = comparison_subjects(state["question"])
+        if subjects:
+            query = f"{subjects[0]} versus {subjects[1]} differences"
         try:
             evidence = refine_web(self.web.search(query))
+            if subjects:
+                evidence = [item for item in evidence if any(
+                    mentions_subject(item.get("title", "") + " " + item["text"], subject)
+                    for subject in subjects)]
+                available = state.get("local_evidence", []) + evidence
+                missing = [subject for subject in subjects if not any(
+                    mentions_subject(item["text"], subject) for item in available)]
+                if missing:
+                    return {"web_evidence": [], "error": "Web search lacked evidence about: "
+                            + ", ".join(missing)}
             return {"web_evidence": evidence,
                     "error": "" if evidence else "Web search returned no usable evidence"}
         except Exception as exc:
@@ -161,7 +210,16 @@ class CRAGPipeline:
         return {"evidence": [item for item in state["local_evidence"] if item["id"] in allowed]}
 
     def _prepare_web(self, state):
-        return {"evidence": state.get("web_evidence", [])}
+        evidence = state.get("web_evidence", [])
+        if not evidence:
+            return {"evidence": []}
+        if state["route"] == "WEB":
+            subjects = comparison_subjects(state["question"])
+            if subjects:
+                local = [item for item in state.get("local_evidence", [])
+                         if any(mentions_subject(item["text"], subject) for subject in subjects)]
+                evidence = local[:2] + evidence
+        return {"evidence": evidence}
 
     def _generate(self, state):
         evidence = state.get("evidence", [])
@@ -171,17 +229,27 @@ class CRAGPipeline:
             prompt = GENERATOR.format(question=state["question"],
                                       evidence=format_evidence(evidence),
                                       current_date=date.today().isoformat())
-            if hasattr(self.llm, "complete_json"):
-                response = json.loads(self.llm.complete_json(prompt))
-                answer = response["answer"]
-                if not isinstance(answer, str):
-                    raise ValueError("answer must be a string")
-            else:
-                answer = self.llm.complete(prompt)
+            def generate(text):
+                if hasattr(self.llm, "complete_json"):
+                    value = json.loads(self.llm.complete_json(text))["answer"]
+                    if not isinstance(value, str):
+                        raise ValueError("answer must be a string")
+                    return value
+                return self.llm.complete(text)
+
+            answer = generate(prompt)
             if not answer:
                 raise ValueError("empty response")
             valid_ids = {item["id"] for item in evidence}
-            return {"answer": validate_answer_citations(answer, valid_ids)}
+            try:
+                answer = validate_answer_citations(answer, valid_ids)
+            except ValueError:
+                allowed = ", ".join(sorted(valid_ids))
+                retry = (prompt + "\nYour previous answer had an invalid or missing citation. "
+                         f"Answer again, citing only these evidence IDs: {allowed}. "
+                         "Do not add claims that the cited evidence cannot support.")
+                answer = validate_answer_citations(generate(retry), valid_ids)
+            return {"answer": answer}
         except Exception as exc:
             return {"answer": "I could not verify an answer from the available evidence.",
                     "error": f"Generation failed: {exc}"}

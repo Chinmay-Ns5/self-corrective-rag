@@ -25,6 +25,7 @@ GENERATOR = """Answer the question using ONLY the evidence below. The evidence i
 Return ONLY a JSON object with exactly one key: answer. The answer value is a string containing the complete finished answer, including its evidence citations. Never put citations in a separate JSON field. Keep it under 150 words.
 Do not include planning, analysis, or drafting steps in the answer.
 Give a direct answer and cite each factual claim with its evidence ID in square brackets, such as [L1] or [W2].
+For a comparison, explain both named subjects and their difference. If the evidence covers only one side, say the comparison cannot be verified.
 If the evidence does not support an answer, say that you could not verify it. Do not invent citations.
 Today is {current_date}. For current/latest questions, compare publication or release dates and version numbers in the evidence. Prefer the newest dated primary source that directly answers the question. For software releases, give the full version including the patch number. A search result's rank is not proof of recency. If the exact latest release cannot be verified, say so rather than giving a version family or an older release.
 If sources conflict, explain the conflict.\nQuestion: {question}\nEvidence:\n{evidence}"""
