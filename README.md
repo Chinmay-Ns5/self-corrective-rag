@@ -1,6 +1,6 @@
 # Self-Corrective RAG
 
-Integrated Prompt Engineering mini project combining the ingestion, CRAG backend, and Streamlit UI branches. PDF chunks are retrieved from a local ChromaDB collection. An LLM grades whether they answer the question, then a LangGraph workflow chooses local generation, Tavily web search, or query rewriting followed by Tavily search. The UI displays the answer, route, grade, sources, latency, and optional retrieved chunks.
+Integrated Prompt Engineering mini project combining the ingestion, CRAG backend, and Streamlit UI branches. PDF chunks are retrieved with dense ChromaDB search and lexical matching over the indexed collection. An LLM grades whether they answer the question, then a LangGraph workflow chooses local generation, Tavily web search, or query rewriting followed by Tavily search. The UI displays the answer, route, grade, sources, latency, and optional retrieved chunks.
 
 ## Setup
 
@@ -37,8 +37,10 @@ Ollama requests use a bounded 4,096-token context and at most 512 generated toke
 Start the UI from the repository root with:
 
 ```powershell
-.venv\Scripts\python -m streamlit run app.py
+.\run.ps1
 ```
+
+The launcher uses the project's `.venv` if present, or the existing `PE/.venv` workspace environment. It runs from the project directory, so it also works when invoked from elsewhere. When a local index exists, it uses the cached embedding model offline to avoid a model-hub check on each run. Start Ollama before launching the UI; press Ctrl+C to stop Streamlit.
 
 The question form calls the shared `src.crag.service.make_pipeline` factory and `pipeline.ask(question)`. The embedding model and database are cached across UI reruns. After rebuilding the index, click **Reload backend**. Missing database/model and API failures are shown in the app. Without a Tavily key, local answers still work; questions requiring web search return an explicit failure rather than an unsupported answer.
 
@@ -55,3 +57,7 @@ For an automated check without API calls:
 Tests exercise the real graph and Streamlit form with fake LLM/search clients, including every route, source display, cached resource reuse, empty input, and setup/API failures. Live model and Tavily behavior require separate checks with the configured services.
 
 The grader's scores require calibration against labeled questions before making claims about routing accuracy. Run the same question set through the baseline RAG (`python -m src.retrieval.baseline_rag`) and this pipeline for the project evaluation.
+
+For a repeatable baseline-versus-CRAG run, use `python -m scripts.evaluate --offline` with Ollama and Tavily configured. The 50-question dataset, review rubric, and output instructions are in [evaluation/README.md](evaluation/README.md). Human-reviewed correctness and groundedness are kept separate from automatic routing and latency measurements.
+
+The first 50-question run and its limitations are recorded in [evaluation/initial_findings.md](evaluation/initial_findings.md).

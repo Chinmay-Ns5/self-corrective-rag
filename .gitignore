@@ -222,5 +222,6 @@ __marimo__/
 data/raw/pdfs/*.pdf
 data/processed/chunks/*.json
 data/vectorstore/
+evaluation/results/
 vectorstore/chroma/*
 !vectorstore/chroma/.gitkeep

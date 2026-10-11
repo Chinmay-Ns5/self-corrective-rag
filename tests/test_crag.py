@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from src.crag.pipeline import CRAGPipeline, choose_route, parse_grade
+from src.crag.pipeline import CRAGPipeline, choose_route, parse_grade, validate_answer_citations
 from src.crag.settings import Settings
 
 
@@ -108,6 +108,14 @@ class PipelineTests(unittest.TestCase):
             parse_grade('{"score": 1.2, "evidence_ids": ["L1"]}', {"L1"})
         self.assertEqual(choose_route(0.75, self.settings), "LOCAL")
         self.assertEqual(choose_route(0.40, self.settings), "WEB")
+
+    def test_grouped_citations_are_checked_before_display(self):
+        self.assertEqual(
+            validate_answer_citations("Supported [W1, W2].", {"W1", "W2"}),
+            "Supported [W1] [W2].",
+        )
+        with self.assertRaisesRegex(ValueError, "invalid evidence citation"):
+            validate_answer_citations("Unsupported [W1, W99]. Supported [W1].", {"W1"})
 
     def test_web_failure_does_not_fabricate_answer(self):
         pipeline = CRAGPipeline(lambda question, top_k: self.results,

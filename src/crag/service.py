@@ -6,15 +6,17 @@ from src.crag.web import TavilySearch
 
 
 def make_pipeline(settings=None):
-    from src.retrieval.retriever import load_embedding_model, load_vector_database, retrieve
+    from src.retrieval.hybrid import HybridRetriever
+    from src.retrieval.retriever import load_embedding_model, load_vector_database
 
     settings = settings or Settings.from_env()
     collection = load_vector_database()
     llm = OllamaLLM(settings.ollama_model, settings.ollama_url)
     llm.check_ready()
     model = load_embedding_model()
+    retriever = HybridRetriever(collection, model)
     return CRAGPipeline(
-        retrieve=lambda question, top_k: retrieve(question, collection, model, top_k),
+        retrieve=retriever.retrieve,
         llm=llm,
         web=TavilySearch(settings.tavily_key),
         settings=settings,

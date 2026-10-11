@@ -2,6 +2,7 @@
 import json
 import re
 import time
+from datetime import date
 from typing import TypedDict
 
 from langgraph.graph import END, START, StateGraph
@@ -40,7 +41,8 @@ def local_chunks(results):
 def format_evidence(items, max_chars=1200):
     return "\n\n".join(
         f"[{item['id']}] {item.get('source') or item.get('title') or ''} "
-        f"{item.get('page') or item.get('url') or ''}\n{item['text'][:max_chars]}"
+        f"{item.get('page') or item.get('url') or ''} "
+        f"{item.get('published_date') or ''}\n{item['text'][:max_chars]}"
         for item in items
     )
 
@@ -59,6 +61,24 @@ def parse_grade(raw, valid_ids):
                 "evidence_ids": ids}
     except (ValueError, TypeError, KeyError, AttributeError) as exc:
         raise ValueError(f"Invalid retrieval grade: {exc}") from exc
+
+
+def validate_answer_citations(answer, valid_ids):
+    """Accept single or grouped evidence IDs, rejecting unknown bracketed citations."""
+    cited_ids = set()
+
+    def normalize(match):
+        ids = [item.strip() for item in match.group(1).split(",")]
+        if not ids or any(not re.fullmatch(r"[LW]\d+", item) or item not in valid_ids
+                          for item in ids):
+            raise ValueError("answer has an invalid evidence citation")
+        cited_ids.update(ids)
+        return " ".join(f"[{item}]" for item in ids)
+
+    answer = re.sub(r"\[([^\[\]]+)\]", normalize, answer)
+    if not cited_ids:
+        raise ValueError("answer lacks valid evidence citations")
+    return answer
 
 
 def choose_route(score, settings):
@@ -117,7 +137,9 @@ class CRAGPipeline:
 
     def _rewrite(self, state):
         try:
-            query = self.llm.complete(REWRITER.format(question=state["question"])).strip().strip('"')
+            query = self.llm.complete(REWRITER.format(
+                question=state["question"], current_date=date.today().isoformat()
+            )).strip().strip('"')
             if not query or "\n" in query or len(query) > 300:
                 query = state["question"]
             return {"rewritten_query": query}
@@ -146,7 +168,9 @@ class CRAGPipeline:
         if not evidence:
             return {"answer": "I could not verify an answer from the available evidence."}
         try:
-            prompt = GENERATOR.format(question=state["question"], evidence=format_evidence(evidence))
+            prompt = GENERATOR.format(question=state["question"],
+                                      evidence=format_evidence(evidence),
+                                      current_date=date.today().isoformat())
             if hasattr(self.llm, "complete_json"):
                 response = json.loads(self.llm.complete_json(prompt))
                 answer = response["answer"]
@@ -157,10 +181,7 @@ class CRAGPipeline:
             if not answer:
                 raise ValueError("empty response")
             valid_ids = {item["id"] for item in evidence}
-            cited_ids = set(re.findall(r"\[([LW]\d+)\]", answer))
-            if not cited_ids or not cited_ids <= valid_ids:
-                raise ValueError("answer lacks valid evidence citations")
-            return {"answer": answer}
+            return {"answer": validate_answer_citations(answer, valid_ids)}
         except Exception as exc:
             return {"answer": "I could not verify an answer from the available evidence.",
                     "error": f"Generation failed: {exc}"}
