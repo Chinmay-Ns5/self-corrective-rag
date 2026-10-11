@@ -9,6 +9,7 @@ from streamlit.testing.v1 import AppTest
 
 from src.crag.pipeline import CRAGPipeline
 from src.crag.settings import Settings
+from src.ingestion.upload import UploadResult
 from tests.test_crag import AmbiguityLLM, FakeLLM, FakeWeb
 
 APP = Path(__file__).resolve().parents[1] / "app.py"
@@ -101,6 +102,32 @@ class AppIntegrationTests(unittest.TestCase):
             app = AppTest.from_file(str(APP), default_timeout=20).run()
             self.assertEqual(len(app.exception), 0)
             self.assertIn("Invalid configuration", app.error[0].value)
+
+    def test_upload_refreshes_cached_backend_for_next_question(self):
+        class Uploaded:
+            name = "new_paper.pdf"
+
+            def getvalue(self):
+                return b"%PDF-test"
+
+        pipeline = CRAGPipeline(
+            lambda question, top_k: {"documents": [["Evidence from the PDF"]],
+                                      "metadatas": [[{"source": "paper.pdf", "page": 1}]]},
+            FakeLLM(0.9), FakeWeb(), Settings(),
+        )
+        result = UploadResult("new_paper.pdf", 1, 1, 2)
+        with patch("src.crag.service.make_pipeline", return_value=pipeline) as factory, \
+                patch("streamlit.file_uploader", return_value=Uploaded()), \
+                patch("src.ingestion.upload.add_pdf", return_value=result) as add:
+            app = AppTest.from_file(str(APP), default_timeout=20).run()
+            self.submit(app)
+            self.assertEqual(factory.call_count, 1)
+            next(button for button in app.button if button.label == "Add to knowledge base").click()
+            app.run()
+            add.assert_called_once_with("new_paper.pdf", b"%PDF-test")
+            self.assertNotIn("crag_result", app.session_state)
+            self.submit(app)
+            self.assertEqual(factory.call_count, 2)
 
 
 if __name__ == "__main__":

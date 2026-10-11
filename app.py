@@ -25,6 +25,24 @@ def run_crag_query(question: str) -> dict[str, Any]:
     return get_pipeline(Settings.from_env()).ask(question)
 
 
+def render_upload() -> None:
+    st.subheader("Add a PDF")
+    uploaded = st.file_uploader("Choose a text-based PDF", type=["pdf"])
+    if st.button("Add to knowledge base", disabled=uploaded is None,
+                 use_container_width=True):
+        try:
+            from src.ingestion.upload import add_pdf
+
+            with st.spinner("Extracting text and indexing the PDF..."):
+                result = add_pdf(uploaded.name, uploaded.getvalue())
+            get_pipeline.clear()
+            st.session_state.pop("crag_result", None)
+            st.session_state.pop("crag_error", None)
+            st.success(f"Added {result.filename}: {result.chunks} chunks indexed. Ask a question about it below.")
+        except Exception as exc:
+            st.error(f"The PDF could not be added: {exc}")
+
+
 def render_sidebar() -> dict[str, bool]:
     with st.sidebar:
         st.title("CRAG Controls")
@@ -48,6 +66,8 @@ def render_sidebar() -> dict[str, bool]:
             st.session_state.pop("crag_result", None)
             st.session_state.pop("crag_error", None)
             st.success("The backend will reload on your next question.")
+        st.divider()
+        render_upload()
         return controls
 
 

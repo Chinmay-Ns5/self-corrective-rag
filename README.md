@@ -44,6 +44,8 @@ The launcher uses the project's `.venv` if present, or the existing `PE/.venv` w
 
 The question form calls the shared `src.crag.service.make_pipeline` factory and `pipeline.ask(question)`. The embedding model and database are cached across UI reruns. After rebuilding the index, click **Reload backend**. Missing database/model and API failures are shown in the app. Without a Tavily key, local answers still work; questions requiring web search return an explicit failure rather than an unsupported answer.
 
+Use **Add a PDF** in the sidebar to upload a text-based PDF of up to 20 MB. The app saves it under `data/raw/pdfs/`, adds its chunks to the existing Chroma collection, and refreshes the cached backend for the next question. An image-only scanned PDF needs OCR before upload. A file with the same name as an existing corpus PDF is rejected to avoid silently replacing its evidence. Uploaded PDFs are local and ignored by Git; a later full `python -m scripts.ingest` includes them in the rebuilt index.
+
 ## Backend contract
 
 `src.crag.service.make_pipeline().ask(question)` returns `question`, `answer`, `route`, `evaluation` (`score`, `reason`, `evidence_ids`), `rewritten_query`, `retrieved_documents`, `sources`, `latency_seconds`, and `error`. Local sources carry PDF filename and page; web sources carry URL and title. Empty or failed web searches return a clear unverified answer. The generator requires citations matching supplied evidence IDs. Citation validation checks IDs; groundedness still requires evaluation.
