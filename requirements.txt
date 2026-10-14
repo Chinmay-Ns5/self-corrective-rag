@@ -8,3 +8,7 @@ pypdf==6.17.0
 python-dotenv==1.2.3
 sentence-transformers==6.0.0
 streamlit==1.65.0
+# Compatible PyTorch pair; Transformers processor discovery can import vision code.
+torch==2.13.0
+torchvision==0.28.0
+transformers==5.16.1

@@ -42,6 +42,11 @@ python -m venv .venv
 .venv\Scripts\python -m pip install -r requirements.txt
 ```
 
+PyTorch and Torchvision are pinned as a compatible pair. Torchvision is included
+because Transformers processor discovery can import image-processing modules
+during model setup. After changing these packages, restart the Streamlit process
+or Python kernel so it reloads the installed modules.
+
 Place the team's PDF corpus in `data/raw/pdfs/`. The PDFs, generated chunks, vector database, and `.env` are ignored by Git. The first index build downloads the `all-MiniLM-L6-v2` embedding model; later offline runs can set `HF_HUB_OFFLINE=1` once that model is cached.
 
 Create `.env` from `.env.example` if you do not already have one:
