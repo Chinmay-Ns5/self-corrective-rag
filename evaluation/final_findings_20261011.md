@@ -18,9 +18,9 @@ URLs, and the full review sheet are retained locally under the ignored
   were rerun after focused comparison and citation fixes. The final snapshot
   replaces only those rows. The full run and targeted reruns used 34 Tavily
   searches in total; the final snapshot contains 28 web routes.
-- One reviewer checked the answers against the dataset reference and the
+- The assistant checked the answers against the dataset reference and the
   recorded PDF excerpts or web source links. Current facts were checked against
-  the official sources linked below. A second independent reviewer has not
+  the official sources linked below. An independent human reviewer has not
   repeated these judgments. Labels are binary and deliberately strict: an
   incomplete answer or an unsupported additional claim is marked incorrect.
 - `gold_route` was assigned from the **retrieved excerpts**, not merely the

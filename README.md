@@ -2,6 +2,37 @@
 
 Integrated Prompt Engineering mini project combining the ingestion, CRAG backend, and Streamlit UI branches. PDF chunks are retrieved with dense ChromaDB search and lexical matching over the indexed collection. An LLM grades whether they answer the question, then a LangGraph workflow chooses local generation, Tavily web search, or query rewriting followed by Tavily search. The UI displays the answer, route, grade, sources, latency, and optional retrieved chunks.
 
+## Literature review and presentation
+
+For a first-review PPT, give the slide-writing LLM
+[docs/literature_review_and_contribution.md](docs/literature_review_and_contribution.md).
+It is a standalone brief with paper summaries, implementation differences,
+the contribution's algorithmic detail, checked results and limitations,
+a slide outline, and a ready-to-use drafting prompt.
+
+The four main papers are:
+
+1. Yan et al., **Corrective Retrieval Augmented Generation** (2024) —
+   [paper](https://arxiv.org/abs/2401.15884): main architectural inspiration.
+2. Lewis et al., **Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks** (2020) —
+   [paper](https://arxiv.org/abs/2005.11401): RAG foundation.
+3. Gao et al., **Retrieval-Augmented Generation for Large Language Models: A Survey** (2023 preprint) —
+   [paper](https://arxiv.org/abs/2312.10997): literature and design background.
+4. Asai et al., **Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection** (2023 preprint) —
+   [paper](https://arxiv.org/abs/2310.11511): related adaptive retrieval and critique work.
+
+Our contribution is an evaluated CRAG adaptation and passage-selection refinement;
+research novelty has not been established. The adopted refinement selects the
+highest-scoring chunk on each reserved body page instead of its first chunk.
+On 15 fresh questions, inspected sufficient context improved from 7/15 to 9/15
+at comparable retrieval time. These are retrieval-context judgments by the
+assistant, not generated-answer accuracy or independent human review. Details:
+[fresh retrieval evaluation](evaluation/retrieval_fresh_findings_20261014.md).
+
+The brief lists the other six papers in the PDF corpus and additional prior work
+consulted during the novelty check. Corpus inclusion does not imply implementing
+each paper's method.
+
 ## Setup
 
 Use Python 3.11, the version used for integration checks. From this repository root:
@@ -60,6 +91,6 @@ Tests exercise the real graph and Streamlit form with fake LLM/search clients, i
 
 The grader's scores require calibration against labeled questions before making claims about routing accuracy. Run the same question set through the baseline RAG (`python -m src.retrieval.baseline_rag`) and this pipeline for the project evaluation.
 
-For a repeatable baseline-versus-CRAG run, use `python -m scripts.evaluate --offline` with Ollama and Tavily configured. The 50-question dataset, review rubric, and output instructions are in [evaluation/README.md](evaluation/README.md). Human-reviewed correctness and groundedness are kept separate from automatic routing and latency measurements.
+For a repeatable baseline-versus-CRAG run, use `python -m scripts.evaluate --offline` with Ollama and Tavily configured. The 50-question dataset, review rubric, and output instructions are in [evaluation/README.md](evaluation/README.md). Reviewed correctness and groundedness are kept separate from automatic routing and latency measurements.
 
-The completed 50-question, human-reviewed run, its results, and limitations are recorded in [evaluation/final_findings_20261011.md](evaluation/final_findings_20261011.md). The earlier pre-fix snapshot remains in [evaluation/initial_findings.md](evaluation/initial_findings.md).
+The completed 50-question run, its assistant-reviewed results, and limitations are recorded in [evaluation/final_findings_20261011.md](evaluation/final_findings_20261011.md). The earlier pre-fix snapshot remains in [evaluation/initial_findings.md](evaluation/initial_findings.md).
