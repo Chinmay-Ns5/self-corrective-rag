@@ -4,6 +4,14 @@ The completed 2026-10-11 evaluation, including reviewed scores and known failure
 [`final_findings_20261011.md`](final_findings_20261011.md). Its compact per-question
 labels are in [`review_20261011.csv`](review_20261011.csv).
 
+The CPU-only retrieval ablation and its candidate passage-selection comparison
+are in [`retrieval_findings_20261014.md`](retrieval_findings_20261014.md). This
+benchmark needs the cached embedding model and index; it does not call Ollama
+or Tavily.
+
+The fresh 15-question check and the adopted body-chunk refinement are documented
+in [`retrieval_fresh_findings_20261014.md`](retrieval_fresh_findings_20261014.md).
+
 `questions.jsonl` contains 50 labeled questions: 20 local, 15 outside the PDF corpus,
 5 with partial local evidence, 5 lacking a referent, and 5 requiring current information.
 The expected route is `LOCAL`, `CLARIFY`, or `WEB_ANY` (`WEB` or `REWRITE_AND_WEB`).

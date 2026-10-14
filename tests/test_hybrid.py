@@ -46,6 +46,33 @@ class HybridTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             retriever.retrieve("Zephyr", top_k=0)
 
+    def test_named_paper_recovers_answer_later_on_selected_body_page(self):
+        collection = FakeCollection()
+        collection.ids = [f"chunk_{i}" for i in range(7)] + ["distractor"]
+        collection.documents = [
+            "Zephyr model abstract about document representation.",
+            "Overview of Zephyr model.",
+            "Background and notation used in neural encoders.",
+            "Zephyr model uses rotary positional encoding.",
+            "Additional method discussion.",
+            "Other representation details.",
+            "Appendix and references.",
+            "Zephyr model positional encoding positional encoding comparisons.",
+        ]
+        collection.metadatas = [
+            {"source": "zephyr_model.pdf", "page": page}
+            for page in (1, 1, 2, 2, 3, 3, 10)
+        ] + [{"source": "other.pdf", "page": 1}]
+        collection.query = lambda **kwargs: {
+            "ids": [["distractor", "chunk_0", "chunk_1", "chunk_2", "chunk_4"]]
+        }
+        result = HybridRetriever(collection, FakeEmbedding()).retrieve(
+            "What positional encoding does Zephyr model use?", top_k=5)
+        self.assertIn("chunk_3", result["ids"][0])
+        self.assertIn("chunk_0", result["ids"][0])
+        self.assertIn("chunk_1", result["ids"][0])
+        self.assertEqual(len(set(result["ids"][0])), 5)
+
 
 if __name__ == "__main__":
     unittest.main()

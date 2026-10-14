@@ -1,0 +1,16 @@
+id,group,previous_context_sufficient,new_context_sufficient,notes
+N01,detail,0,0,Both reserve Sentence-BERT because the words sentence and BERT match its filename; BERT chunk_536 covers masking rather than NSP sampling.
+N02,detail,0,1,Candidate chunk_309 explicitly gives inner-layer dimension 2048; old chunks only discuss attention and stacks.
+N03,detail,0,0,Old passages mention SNLI but not the full training pair; new chunk_364 names SNLI/MultiNLI for InferSent rather than SBERT. Insufficient attribution.
+N04,detail,1,1,Old chunk_460 and candidate chunks_460/443 explicitly define high-BM25 passages without the answer as negatives.
+N05,detail,0,1,Old chunk_988 ends before the ambiguous branch combines external knowledge; diagram text in chunk_983 is incomplete. Candidate chunk_992 states both processed knowledge types are combined.
+N06,paraphrase,1,1,Both retrieve chunk_518 naming masked language modeling and next-sentence prediction.
+N07,paraphrase,1,1,Both retrieve chunk_353 explaining pairwise processing and about 50 million computations for 10000 sentences.
+N08,paraphrase,1,1,Both retrieve chunk_312 with sine/cosine positional encoding formulas.
+N09,paraphrase,0,0,Retrieved CRAG excerpts describe irrelevance and evaluation but do not state discarding the documents and replacing them via web search.
+N10,paraphrase,1,1,Both retrieve chunk_1072 describing separately encoded query/document embeddings and late interaction; this supports independent offline document encoding. Preselected anchor IDs were not exhaustive.
+N11,comparison,1,1,Both retrieve SBERT cosine evidence in chunk_368 and DPR dot-product/inner-product evidence in chunk_438 or chunk_439.
+N12,comparison,1,1,"Both retrieve chunk_541 explaining joint BERT sentence-pair encoding, together with SBERT abstract chunks_353/354 describing the contrast and sentence embeddings. Preselected anchor IDs were not exhaustive."
+N13,comparison,0,0,"Self-RAG reflection is covered, but the retrieved CRAG excerpt chunk_1059 discusses Self-CRAG integration rather than the standalone CRAG evaluator/confidence mechanism."
+N14,comparison,0,0,DPR abstract names a dual encoder but not its single CLS vector; retrieved ColBERT related-work text does not describe its bag of token vectors.
+N15,comparison,0,0,CRAG web fallback is covered; no retrieved excerpt explains ReAct actions gathering external information.

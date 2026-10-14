@@ -88,16 +88,15 @@ class HybridRetriever:
                 # Keep two distinct body pages so one lexical hit cannot crowd
                 # out the neighboring method or action description.
                 best_by_page = {}
-                first_by_page = {}
                 for row_id in body:
                     page = self.rows[row_id][1]["page"]
                     if page not in best_by_page or scores[row_id] > scores[best_by_page[page]]:
                         best_by_page[page] = row_id
-                    if page not in first_by_page or reading_order(row_id) < reading_order(first_by_page[page]):
-                        first_by_page[page] = row_id
                 pages = sorted(best_by_page, key=lambda page: scores[best_by_page[page]],
                                reverse=True)[:2]
-                selected.extend(first_by_page[page] for page in pages)
+                # The page's first chunk can be boilerplate; reserve the chunk
+                # that actually scored highest for this question instead.
+                selected.extend(best_by_page[page] for page in pages)
                 matches.append((len(title), selected))
         matches.sort(key=lambda match: match[0], reverse=True)
         return [row_id for _, early in matches[:1] for row_id in early]

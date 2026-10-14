@@ -1,0 +1,2320 @@
+{
+  "method": "top-5 retrieval; all answer regex anchors in one target-paper chunk",
+  "limitations": "Lexical anchors are proxies, not exhaustive human relevance labels or answer accuracy. Existing questions informed implementation; added detail questions are exploratory, not a blinded holdout.",
+  "model": "all-MiniLM-L6-v2",
+  "device": "cpu",
+  "torch_threads": 2,
+  "vectors": 1158,
+  "repeats": 7,
+  "startup_seconds": 21.6027866000004,
+  "question_groups": {
+    "existing_local": 20,
+    "added_detail": 10
+  },
+  "summary": {
+    "dense": {
+      "questions": 30,
+      "anchor_hits": 14,
+      "anchor_hit_at_5": 0.4666666666666667,
+      "anchor_reciprocal_rank_at_5": 0.31666666666666665,
+      "target_paper_hit_at_5": 0.9,
+      "target_paper_fraction_at_5": 0.7,
+      "ranking_median_ms": 4.667796666611442,
+      "embedding_plus_ranking_ms": 30.777966666664724
+    },
+    "hybrid_without_reservation": {
+      "questions": 30,
+      "anchor_hits": 21,
+      "anchor_hit_at_5": 0.7,
+      "anchor_reciprocal_rank_at_5": 0.4716666666666667,
+      "target_paper_hit_at_5": 1,
+      "target_paper_fraction_at_5": 0.8133333333333334,
+      "ranking_median_ms": 8.913586666615933,
+      "embedding_plus_ranking_ms": 35.023756666669215
+    },
+    "current_hybrid": {
+      "questions": 30,
+      "anchor_hits": 24,
+      "anchor_hit_at_5": 0.8,
+      "anchor_reciprocal_rank_at_5": 0.49666666666666665,
+      "target_paper_hit_at_5": 1,
+      "target_paper_fraction_at_5": 0.92,
+      "ranking_median_ms": 9.252413333251752,
+      "embedding_plus_ranking_ms": 35.36258333330503
+    }
+  },
+  "by_group": {
+    "added_detail": {
+      "dense": {
+        "questions": 10,
+        "anchor_hits": 5,
+        "anchor_hit_at_5": 0.5,
+        "anchor_reciprocal_rank_at_5": 0.325,
+        "target_paper_hit_at_5": 0.9,
+        "target_paper_fraction_at_5": 0.7,
+        "ranking_median_ms": 4.612819999874773,
+        "embedding_plus_ranking_ms": 27.983120000044437
+      },
+      "hybrid_without_reservation": {
+        "questions": 10,
+        "anchor_hits": 7,
+        "anchor_hit_at_5": 0.7,
+        "anchor_reciprocal_rank_at_5": 0.4116666666666667,
+        "target_paper_hit_at_5": 1,
+        "target_paper_fraction_at_5": 0.8,
+        "ranking_median_ms": 8.734049999839044,
+        "embedding_plus_ranking_ms": 32.10435000000871
+      },
+      "current_hybrid": {
+        "questions": 10,
+        "anchor_hits": 5,
+        "anchor_hit_at_5": 0.5,
+        "anchor_reciprocal_rank_at_5": 0.17333333333333334,
+        "target_paper_hit_at_5": 1,
+        "target_paper_fraction_at_5": 0.92,
+        "ranking_median_ms": 9.063879999848723,
+        "embedding_plus_ranking_ms": 32.43418000001839
+      }
+    },
+    "existing_local": {
+      "dense": {
+        "questions": 20,
+        "anchor_hits": 9,
+        "anchor_hit_at_5": 0.45,
+        "anchor_reciprocal_rank_at_5": 0.3125,
+        "target_paper_hit_at_5": 0.9,
+        "target_paper_fraction_at_5": 0.7,
+        "ranking_median_ms": 4.695284999979776,
+        "embedding_plus_ranking_ms": 32.17538999997487
+      },
+      "hybrid_without_reservation": {
+        "questions": 20,
+        "anchor_hits": 14,
+        "anchor_hit_at_5": 0.7,
+        "anchor_reciprocal_rank_at_5": 0.5016666666666667,
+        "target_paper_hit_at_5": 1,
+        "target_paper_fraction_at_5": 0.8200000000000001,
+        "ranking_median_ms": 9.003355000004376,
+        "embedding_plus_ranking_ms": 36.48345999999947
+      },
+      "current_hybrid": {
+        "questions": 20,
+        "anchor_hits": 19,
+        "anchor_hit_at_5": 0.95,
+        "anchor_reciprocal_rank_at_5": 0.6583333333333333,
+        "target_paper_hit_at_5": 1,
+        "target_paper_fraction_at_5": 0.92,
+        "ranking_median_ms": 9.346679999953267,
+        "embedding_plus_ranking_ms": 36.82678499994836
+      }
+    }
+  },
+  "reservation_triggered": {
+    "dense": {
+      "questions": 26,
+      "anchor_hits": 12,
+      "anchor_hit_at_5": 0.46153846153846156,
+      "anchor_reciprocal_rank_at_5": 0.3173076923076923,
+      "target_paper_hit_at_5": 0.8846153846153846,
+      "target_paper_fraction_at_5": 0.7153846153846154,
+      "ranking_median_ms": 4.597546153735703,
+      "embedding_plus_ranking_ms": 30.11600769227348
+    },
+    "hybrid_without_reservation": {
+      "questions": 26,
+      "anchor_hits": 18,
+      "anchor_hit_at_5": 0.6923076923076923,
+      "anchor_reciprocal_rank_at_5": 0.4544871794871795,
+      "target_paper_hit_at_5": 1,
+      "target_paper_fraction_at_5": 0.823076923076923,
+      "ranking_median_ms": 8.749453846086489,
+      "embedding_plus_ranking_ms": 34.26791538462427
+    },
+    "current_hybrid": {
+      "questions": 26,
+      "anchor_hits": 21,
+      "anchor_hit_at_5": 0.8076923076923077,
+      "anchor_reciprocal_rank_at_5": 0.48333333333333334,
+      "target_paper_hit_at_5": 1,
+      "target_paper_fraction_at_5": 0.9461538461538461,
+      "ranking_median_ms": 9.121765384511841,
+      "embedding_plus_ranking_ms": 34.64022692304962
+    }
+  },
+  "rows": [
+    {
+      "id": "L01",
+      "group": "existing_local",
+      "question": "What two kinds of memory does the original RAG model combine?",
+      "source": "01_rag_knowledge_intensive_nlp.pdf",
+      "answer_patterns": [
+        "parametric",
+        "non.parametric"
+      ],
+      "gold_anchor_ids": [
+        "chunk_1",
+        "chunk_3",
+        "chunk_5",
+        "chunk_6",
+        "chunk_7",
+        "chunk_8",
+        "chunk_9",
+        "chunk_10",
+        "chunk_16",
+        "chunk_20",
+        "chunk_21",
+        "chunk_22",
+        "chunk_37",
+        "chunk_44",
+        "chunk_48",
+        "chunk_55",
+        "chunk_56",
+        "chunk_109"
+      ],
+      "reserved_ids": [],
+      "embedding_ms": 32.69559999989724,
+      "variants": {
+        "dense": {
+          "ids": [
+            "chunk_117",
+            "chunk_60",
+            "chunk_121",
+            "chunk_56",
+            "chunk_120"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.25,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.4,
+          "ranking_median_ms": 5.798600000161969,
+          "embedding_plus_ranking_ms": 38.49420000005921
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_56",
+            "chunk_117",
+            "chunk_919",
+            "chunk_60",
+            "chunk_3"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.6,
+          "ranking_median_ms": 10.740300000179559,
+          "embedding_plus_ranking_ms": 43.4359000000768
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_56",
+            "chunk_117",
+            "chunk_919",
+            "chunk_60",
+            "chunk_3"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.6,
+          "ranking_median_ms": 10.986700000103156,
+          "embedding_plus_ranking_ms": 43.682300000000396
+        }
+      }
+    },
+    {
+      "id": "L02",
+      "group": "existing_local",
+      "question": "How do RAG-Sequence and RAG-Token differ in their use of retrieved documents?",
+      "source": "01_rag_knowledge_intensive_nlp.pdf",
+      "answer_patterns": [
+        "rag.sequence",
+        "rag.token",
+        "different"
+      ],
+      "gold_anchor_ids": [
+        "chunk_12",
+        "chunk_13",
+        "chunk_18",
+        "chunk_43"
+      ],
+      "reserved_ids": [],
+      "embedding_ms": 32.62269999959244,
+      "variants": {
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_48",
+            "chunk_14",
+            "chunk_13",
+            "chunk_49",
+            "chunk_97"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.3333333333333333,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 11.492800000269199,
+          "embedding_plus_ranking_ms": 44.11549999986164
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_48",
+            "chunk_14",
+            "chunk_13",
+            "chunk_49",
+            "chunk_97"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.3333333333333333,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 11.228700000174285,
+          "embedding_plus_ranking_ms": 43.85139999976673
+        },
+        "dense": {
+          "ids": [
+            "chunk_48",
+            "chunk_110",
+            "chunk_131",
+            "chunk_14",
+            "chunk_212"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.6,
+          "ranking_median_ms": 5.6515000005674665,
+          "embedding_plus_ranking_ms": 38.27420000015991
+        }
+      }
+    },
+    {
+      "id": "L03",
+      "group": "existing_local",
+      "question": "Which two common LLM problems does the RAG survey say external retrieval can help address?",
+      "source": "02_rag_survey.pdf",
+      "answer_patterns": [
+        "hallucination",
+        "outdated"
+      ],
+      "gold_anchor_ids": [
+        "chunk_111"
+      ],
+      "reserved_ids": [
+        "chunk_111",
+        "chunk_112",
+        "chunk_189",
+        "chunk_160"
+      ],
+      "embedding_ms": 28.07539999957953,
+      "variants": {
+        "current_hybrid": {
+          "ids": [
+            "chunk_111",
+            "chunk_112",
+            "chunk_189",
+            "chunk_160",
+            "chunk_214"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 10.299099999429018,
+          "embedding_plus_ranking_ms": 38.37449999900855
+        },
+        "dense": {
+          "ids": [
+            "chunk_214",
+            "chunk_967",
+            "chunk_984",
+            "chunk_117",
+            "chunk_1016"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.4,
+          "ranking_median_ms": 5.32279999970342,
+          "embedding_plus_ranking_ms": 33.39819999928295
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_214",
+            "chunk_189",
+            "chunk_157",
+            "chunk_974",
+            "chunk_213"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.8,
+          "ranking_median_ms": 10.113100000125996,
+          "embedding_plus_ranking_ms": 38.18849999970553
+        }
+      }
+    },
+    {
+      "id": "L04",
+      "group": "existing_local",
+      "question": "According to the RAG survey, what does RAG add to an LLM's internal knowledge?",
+      "source": "02_rag_survey.pdf",
+      "answer_patterns": [
+        "external databases"
+      ],
+      "gold_anchor_ids": [
+        "chunk_111",
+        "chunk_112",
+        "chunk_123"
+      ],
+      "reserved_ids": [
+        "chunk_111",
+        "chunk_112",
+        "chunk_180",
+        "chunk_153"
+      ],
+      "embedding_ms": 26.948300000185554,
+      "variants": {
+        "dense": {
+          "ids": [
+            "chunk_123",
+            "chunk_124",
+            "chunk_117",
+            "chunk_212",
+            "chunk_214"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 5.17290000061621,
+          "embedding_plus_ranking_ms": 32.121200000801764
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_157",
+            "chunk_123",
+            "chunk_180",
+            "chunk_124",
+            "chunk_117"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 11.071500000070955,
+          "embedding_plus_ranking_ms": 38.01980000025651
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_111",
+            "chunk_112",
+            "chunk_180",
+            "chunk_153",
+            "chunk_157"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 11.111199999504606,
+          "embedding_plus_ranking_ms": 38.05949999969016
+        }
+      }
+    },
+    {
+      "id": "L05",
+      "group": "existing_local",
+      "question": "What architecture did Attention Is All You Need introduce?",
+      "source": "03_attention_is_all_you_need.pdf",
+      "answer_patterns": [
+        "transformer",
+        "attention",
+        "recurrence|recurrent"
+      ],
+      "gold_anchor_ids": [
+        "chunk_288",
+        "chunk_294",
+        "chunk_297",
+        "chunk_334"
+      ],
+      "reserved_ids": [
+        "chunk_287",
+        "chunk_288",
+        "chunk_299",
+        "chunk_292"
+      ],
+      "embedding_ms": 23.678800000197953,
+      "variants": {
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_349",
+            "chunk_351",
+            "chunk_299",
+            "chunk_350",
+            "chunk_347"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 7.414499999867985,
+          "embedding_plus_ranking_ms": 31.093300000065938
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_287",
+            "chunk_288",
+            "chunk_299",
+            "chunk_292",
+            "chunk_349"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.141400000567955,
+          "embedding_plus_ranking_ms": 31.820200000765908
+        },
+        "dense": {
+          "ids": [
+            "chunk_347",
+            "chunk_350",
+            "chunk_290",
+            "chunk_301",
+            "chunk_349"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 4.1567999996914295,
+          "embedding_plus_ranking_ms": 27.835599999889382
+        }
+      }
+    },
+    {
+      "id": "L06",
+      "group": "existing_local",
+      "question": "Does the original Transformer rely on recurrent or convolutional layers for sequence transduction?",
+      "source": "03_attention_is_all_you_need.pdf",
+      "answer_patterns": [
+        "attention",
+        "recurrence",
+        "convolution"
+      ],
+      "gold_anchor_ids": [
+        "chunk_288",
+        "chunk_297",
+        "chunk_311"
+      ],
+      "reserved_ids": [],
+      "embedding_ms": 28.530999999929918,
+      "variants": {
+        "current_hybrid": {
+          "ids": [
+            "chunk_297",
+            "chunk_334",
+            "chunk_333",
+            "chunk_287",
+            "chunk_292"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 9.209400000145251,
+          "embedding_plus_ranking_ms": 37.74040000007517
+        },
+        "dense": {
+          "ids": [
+            "chunk_297",
+            "chunk_333",
+            "chunk_334",
+            "chunk_309",
+            "chunk_292"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 4.569000000628876,
+          "embedding_plus_ranking_ms": 33.10000000055879
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_297",
+            "chunk_334",
+            "chunk_333",
+            "chunk_287",
+            "chunk_292"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 9.185599999909755,
+          "embedding_plus_ranking_ms": 37.71659999983967
+        }
+      }
+    },
+    {
+      "id": "L07",
+      "group": "existing_local",
+      "question": "What network structures does Sentence-BERT use to create sentence embeddings?",
+      "source": "04_sentence_bert.pdf",
+      "answer_patterns": [
+        "siamese",
+        "triplet"
+      ],
+      "gold_anchor_ids": [
+        "chunk_354",
+        "chunk_355",
+        "chunk_368",
+        "chunk_403"
+      ],
+      "reserved_ids": [
+        "chunk_353",
+        "chunk_354",
+        "chunk_366",
+        "chunk_378"
+      ],
+      "embedding_ms": 23.25159999963944,
+      "variants": {
+        "dense": {
+          "ids": [
+            "chunk_363",
+            "chunk_366",
+            "chunk_531",
+            "chunk_355",
+            "chunk_368"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.25,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.8,
+          "ranking_median_ms": 4.964200000358687,
+          "embedding_plus_ranking_ms": 28.215799999998126
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_366",
+            "chunk_368",
+            "chunk_354",
+            "chunk_363",
+            "chunk_355"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.778800000072806,
+          "embedding_plus_ranking_ms": 32.030399999712245
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_353",
+            "chunk_354",
+            "chunk_366",
+            "chunk_378",
+            "chunk_368"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.649299999888171,
+          "embedding_plus_ranking_ms": 31.90089999952761
+        }
+      }
+    },
+    {
+      "id": "L08",
+      "group": "existing_local",
+      "question": "What similarity measure does the Sentence-BERT paper use to compare its sentence embeddings?",
+      "source": "04_sentence_bert.pdf",
+      "answer_patterns": [
+        "cosine"
+      ],
+      "gold_anchor_ids": [
+        "chunk_354",
+        "chunk_358",
+        "chunk_359",
+        "chunk_368",
+        "chunk_369",
+        "chunk_371",
+        "chunk_372",
+        "chunk_373",
+        "chunk_374",
+        "chunk_375",
+        "chunk_379",
+        "chunk_382",
+        "chunk_393",
+        "chunk_394",
+        "chunk_396",
+        "chunk_397",
+        "chunk_398",
+        "chunk_402"
+      ],
+      "reserved_ids": [
+        "chunk_353",
+        "chunk_354",
+        "chunk_378",
+        "chunk_359"
+      ],
+      "embedding_ms": 75.42219999959343,
+      "variants": {
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_393",
+            "chunk_384",
+            "chunk_375",
+            "chunk_361",
+            "chunk_354"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.970799999588053,
+          "embedding_plus_ranking_ms": 84.39299999918148
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_353",
+            "chunk_354",
+            "chunk_378",
+            "chunk_359",
+            "chunk_393"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 9.374700000080338,
+          "embedding_plus_ranking_ms": 84.79689999967377
+        },
+        "dense": {
+          "ids": [
+            "chunk_393",
+            "chunk_357",
+            "chunk_355",
+            "chunk_375",
+            "chunk_394"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 4.843299999265582,
+          "embedding_plus_ranking_ms": 80.26549999885901
+        }
+      }
+    },
+    {
+      "id": "L09",
+      "group": "existing_local",
+      "question": "What encoder architecture does dense passage retrieval use for questions and passages?",
+      "source": "05_dense_passage_retrieval.pdf",
+      "answer_patterns": [
+        "two.*(?:bert|encoder)|dual.encoder"
+      ],
+      "gold_anchor_ids": [
+        "chunk_430",
+        "chunk_432",
+        "chunk_440",
+        "chunk_445",
+        "chunk_468",
+        "chunk_469",
+        "chunk_481",
+        "chunk_484"
+      ],
+      "reserved_ids": [
+        "chunk_423",
+        "chunk_424",
+        "chunk_430",
+        "chunk_445"
+      ],
+      "embedding_ms": 23.080599999957485,
+      "variants": {
+        "current_hybrid": {
+          "ids": [
+            "chunk_423",
+            "chunk_424",
+            "chunk_430",
+            "chunk_445",
+            "chunk_482"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.3333333333333333,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.970099999714876,
+          "embedding_plus_ranking_ms": 32.05069999967236
+        },
+        "dense": {
+          "ids": [
+            "chunk_436",
+            "chunk_468",
+            "chunk_458",
+            "chunk_435",
+            "chunk_423"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 4.348600000412262,
+          "embedding_plus_ranking_ms": 27.429200000369747
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_430",
+            "chunk_482",
+            "chunk_436",
+            "chunk_481",
+            "chunk_423"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 9.148600000116858,
+          "embedding_plus_ranking_ms": 32.22920000007434
+        }
+      }
+    },
+    {
+      "id": "L10",
+      "group": "existing_local",
+      "question": "Which sparse retrieval baseline does the dense passage retrieval paper compare against?",
+      "source": "05_dense_passage_retrieval.pdf",
+      "answer_patterns": [
+        "bm25",
+        "lucene"
+      ],
+      "gold_anchor_ids": [
+        "chunk_424",
+        "chunk_455",
+        "chunk_466",
+        "chunk_501"
+      ],
+      "reserved_ids": [
+        "chunk_423",
+        "chunk_424",
+        "chunk_458",
+        "chunk_430"
+      ],
+      "embedding_ms": 22.492199999760487,
+      "variants": {
+        "dense": {
+          "ids": [
+            "chunk_436",
+            "chunk_435",
+            "chunk_480",
+            "chunk_451",
+            "chunk_174"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.8,
+          "ranking_median_ms": 4.623799999535549,
+          "embedding_plus_ranking_ms": 27.115999999296037
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_480",
+            "chunk_174",
+            "chunk_1131",
+            "chunk_477",
+            "chunk_423"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.6,
+          "ranking_median_ms": 8.862800000315474,
+          "embedding_plus_ranking_ms": 31.35500000007596
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_423",
+            "chunk_424",
+            "chunk_458",
+            "chunk_430",
+            "chunk_480"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 9.213100000124541,
+          "embedding_plus_ranking_ms": 31.70529999988503
+        }
+      }
+    },
+    {
+      "id": "L11",
+      "group": "existing_local",
+      "question": "What does BERT stand for?",
+      "source": "06_bert.pdf",
+      "answer_patterns": [
+        "bidirectional encoder representations from transformers"
+      ],
+      "gold_anchor_ids": [
+        "chunk_512",
+        "chunk_517"
+      ],
+      "reserved_ids": [
+        "chunk_512",
+        "chunk_513",
+        "chunk_558",
+        "chunk_545"
+      ],
+      "embedding_ms": 23.41950000027282,
+      "variants": {
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_548",
+            "chunk_536",
+            "chunk_531",
+            "chunk_1045",
+            "chunk_599"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.8,
+          "ranking_median_ms": 7.977700000083132,
+          "embedding_plus_ranking_ms": 31.39720000035595
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_512",
+            "chunk_513",
+            "chunk_558",
+            "chunk_545",
+            "chunk_548"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.023899999898276,
+          "embedding_plus_ranking_ms": 31.443400000171096
+        },
+        "dense": {
+          "ids": [
+            "chunk_531",
+            "chunk_599",
+            "chunk_549",
+            "chunk_1115",
+            "chunk_1092"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.6,
+          "ranking_median_ms": 4.848399999900721,
+          "embedding_plus_ranking_ms": 28.26790000017354
+        }
+      }
+    },
+    {
+      "id": "L12",
+      "group": "existing_local",
+      "question": "What makes BERT's pretrained representations bidirectional?",
+      "source": "06_bert.pdf",
+      "answer_patterns": [
+        "left",
+        "right",
+        "context"
+      ],
+      "gold_anchor_ids": [
+        "chunk_512",
+        "chunk_518",
+        "chunk_521",
+        "chunk_522",
+        "chunk_523",
+        "chunk_524",
+        "chunk_534",
+        "chunk_559",
+        "chunk_562",
+        "chunk_592"
+      ],
+      "reserved_ids": [
+        "chunk_512",
+        "chunk_513",
+        "chunk_518",
+        "chunk_558"
+      ],
+      "embedding_ms": 25.226300000213087,
+      "variants": {
+        "current_hybrid": {
+          "ids": [
+            "chunk_512",
+            "chunk_513",
+            "chunk_518",
+            "chunk_558",
+            "chunk_519"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 7.61289999991277,
+          "embedding_plus_ranking_ms": 32.83920000012586
+        },
+        "dense": {
+          "ids": [
+            "chunk_512",
+            "chunk_533",
+            "chunk_518",
+            "chunk_528",
+            "chunk_589"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 4.366600000139442,
+          "embedding_plus_ranking_ms": 29.59290000035253
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_512",
+            "chunk_518",
+            "chunk_519",
+            "chunk_592",
+            "chunk_528"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 7.815199999640754,
+          "embedding_plus_ranking_ms": 33.04149999985384
+        }
+      }
+    },
+    {
+      "id": "L13",
+      "group": "existing_local",
+      "question": "What two activities does ReAct interleave in a language model?",
+      "source": "07_react.pdf",
+      "answer_patterns": [
+        "reasoning",
+        "actions"
+      ],
+      "gold_anchor_ids": [
+        "chunk_614",
+        "chunk_615",
+        "chunk_616",
+        "chunk_617",
+        "chunk_626",
+        "chunk_628",
+        "chunk_630",
+        "chunk_631",
+        "chunk_634",
+        "chunk_636",
+        "chunk_637",
+        "chunk_640",
+        "chunk_641",
+        "chunk_645",
+        "chunk_648",
+        "chunk_653",
+        "chunk_663",
+        "chunk_667",
+        "chunk_668",
+        "chunk_669",
+        "chunk_673",
+        "chunk_675",
+        "chunk_705",
+        "chunk_709",
+        "chunk_710"
+      ],
+      "reserved_ids": [
+        "chunk_614",
+        "chunk_615",
+        "chunk_650",
+        "chunk_713"
+      ],
+      "embedding_ms": 22.55239999976766,
+      "variants": {
+        "dense": {
+          "ids": [
+            "chunk_628",
+            "chunk_680",
+            "chunk_676",
+            "chunk_634",
+            "chunk_637"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 4.074600000421924,
+          "embedding_plus_ranking_ms": 26.627000000189582
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_634",
+            "chunk_676",
+            "chunk_677",
+            "chunk_628",
+            "chunk_789"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.811599999717146,
+          "embedding_plus_ranking_ms": 31.363999999484804
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_614",
+            "chunk_615",
+            "chunk_650",
+            "chunk_713",
+            "chunk_634"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.926299999984622,
+          "embedding_plus_ranking_ms": 31.47869999975228
+        }
+      }
+    },
+    {
+      "id": "L14",
+      "group": "existing_local",
+      "question": "How do actions help the ReAct model during reasoning?",
+      "source": "07_react.pdf",
+      "answer_patterns": [
+        "actions",
+        "external sources"
+      ],
+      "gold_anchor_ids": [
+        "chunk_615"
+      ],
+      "reserved_ids": [
+        "chunk_614",
+        "chunk_615",
+        "chunk_629",
+        "chunk_620"
+      ],
+      "embedding_ms": 22.62090000021999,
+      "variants": {
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_628",
+            "chunk_627",
+            "chunk_630",
+            "chunk_615",
+            "chunk_631"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.25,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 7.59840000046097,
+          "embedding_plus_ranking_ms": 30.21930000068096
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_614",
+            "chunk_615",
+            "chunk_629",
+            "chunk_620",
+            "chunk_628"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 7.942999999613676,
+          "embedding_plus_ranking_ms": 30.563899999833666
+        },
+        "dense": {
+          "ids": [
+            "chunk_638",
+            "chunk_634",
+            "chunk_628",
+            "chunk_627",
+            "chunk_652"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 3.994099999545142,
+          "embedding_plus_ranking_ms": 26.614999999765132
+        }
+      }
+    },
+    {
+      "id": "L15",
+      "group": "existing_local",
+      "question": "What three capabilities does Self-RAG combine in its framework?",
+      "source": "08_self_rag.pdf",
+      "answer_patterns": [
+        "retriev",
+        "generat",
+        "self.reflection"
+      ],
+      "gold_anchor_ids": [
+        "chunk_793",
+        "chunk_796",
+        "chunk_808",
+        "chunk_809",
+        "chunk_812",
+        "chunk_813",
+        "chunk_860"
+      ],
+      "reserved_ids": [
+        "chunk_792",
+        "chunk_793",
+        "chunk_855",
+        "chunk_848"
+      ],
+      "embedding_ms": 21.679299999959767,
+      "variants": {
+        "current_hybrid": {
+          "ids": [
+            "chunk_792",
+            "chunk_793",
+            "chunk_855",
+            "chunk_848",
+            "chunk_1007"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.8,
+          "ranking_median_ms": 10.39760000003298,
+          "embedding_plus_ranking_ms": 32.07689999999275
+        },
+        "dense": {
+          "ids": [
+            "chunk_121",
+            "chunk_797",
+            "chunk_1008",
+            "chunk_124",
+            "chunk_117"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.2,
+          "ranking_median_ms": 4.507599999669765,
+          "embedding_plus_ranking_ms": 26.18689999962953
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_1007",
+            "chunk_972",
+            "chunk_121",
+            "chunk_227",
+            "chunk_797"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.2,
+          "ranking_median_ms": 8.862499999850115,
+          "embedding_plus_ranking_ms": 30.541799999809882
+        }
+      }
+    },
+    {
+      "id": "L16",
+      "group": "existing_local",
+      "question": "Why does Self-RAG avoid indiscriminately retrieving a fixed number of passages?",
+      "source": "08_self_rag.pdf",
+      "answer_patterns": [
+        "regardless|irrelevant",
+        "diminish|reduce"
+      ],
+      "gold_anchor_ids": [
+        "chunk_793"
+      ],
+      "reserved_ids": [
+        "chunk_792",
+        "chunk_793",
+        "chunk_799",
+        "chunk_807"
+      ],
+      "embedding_ms": 28.41320000061387,
+      "variants": {
+        "dense": {
+          "ids": [
+            "chunk_797",
+            "chunk_972",
+            "chunk_1016",
+            "chunk_1008",
+            "chunk_110"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.2,
+          "ranking_median_ms": 5.0682000000961125,
+          "embedding_plus_ranking_ms": 33.48140000070998
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_829",
+            "chunk_813",
+            "chunk_797",
+            "chunk_793",
+            "chunk_972"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.25,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.8,
+          "ranking_median_ms": 9.118500000113272,
+          "embedding_plus_ranking_ms": 37.53170000072714
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_792",
+            "chunk_793",
+            "chunk_799",
+            "chunk_807",
+            "chunk_829"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 10.612299999593233,
+          "embedding_plus_ranking_ms": 39.0255000002071
+        }
+      }
+    },
+    {
+      "id": "L17",
+      "group": "existing_local",
+      "question": "What component does corrective RAG use to assess retrieved document quality?",
+      "source": "09_corrective_rag.pdf",
+      "answer_patterns": [
+        "evaluator",
+        "confidence"
+      ],
+      "gold_anchor_ids": [
+        "chunk_963",
+        "chunk_969",
+        "chunk_981",
+        "chunk_983",
+        "chunk_984",
+        "chunk_988",
+        "chunk_993",
+        "chunk_1055"
+      ],
+      "reserved_ids": [
+        "chunk_962",
+        "chunk_963",
+        "chunk_968",
+        "chunk_988"
+      ],
+      "embedding_ms": 21.009199999753037,
+      "variants": {
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_969",
+            "chunk_200",
+            "chunk_218",
+            "chunk_211",
+            "chunk_1046"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.4,
+          "ranking_median_ms": 8.387500000026193,
+          "embedding_plus_ranking_ms": 29.39669999977923
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_962",
+            "chunk_963",
+            "chunk_968",
+            "chunk_988",
+            "chunk_969"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.649100000184262,
+          "embedding_plus_ranking_ms": 29.6582999999373
+        },
+        "dense": {
+          "ids": [
+            "chunk_211",
+            "chunk_200",
+            "chunk_202",
+            "chunk_121",
+            "chunk_118"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 0,
+          "target_paper_fraction_at_5": 0.0,
+          "ranking_median_ms": 4.5702999996137805,
+          "embedding_plus_ranking_ms": 25.579499999366817
+        }
+      }
+    },
+    {
+      "id": "L18",
+      "group": "existing_local",
+      "question": "What does corrective RAG do when its local retrieved evidence is insufficient?",
+      "source": "09_corrective_rag.pdf",
+      "answer_patterns": [
+        "web search"
+      ],
+      "gold_anchor_ids": [
+        "chunk_963",
+        "chunk_970",
+        "chunk_981",
+        "chunk_982",
+        "chunk_983",
+        "chunk_991",
+        "chunk_992",
+        "chunk_995",
+        "chunk_996",
+        "chunk_997",
+        "chunk_1017",
+        "chunk_1018",
+        "chunk_1019",
+        "chunk_1022",
+        "chunk_1045"
+      ],
+      "reserved_ids": [
+        "chunk_962",
+        "chunk_963",
+        "chunk_994",
+        "chunk_988"
+      ],
+      "embedding_ms": 23.617400000148336,
+      "variants": {
+        "current_hybrid": {
+          "ids": [
+            "chunk_962",
+            "chunk_963",
+            "chunk_994",
+            "chunk_988",
+            "chunk_894"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.8,
+          "ranking_median_ms": 9.074100000361796,
+          "embedding_plus_ranking_ms": 32.69150000051013
+        },
+        "dense": {
+          "ids": [
+            "chunk_119",
+            "chunk_214",
+            "chunk_118",
+            "chunk_121",
+            "chunk_117"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 0,
+          "target_paper_fraction_at_5": 0.0,
+          "ranking_median_ms": 4.082399999788322,
+          "embedding_plus_ranking_ms": 27.69979999993666
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_894",
+            "chunk_119",
+            "chunk_944",
+            "chunk_214",
+            "chunk_1045"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.2,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.2,
+          "ranking_median_ms": 8.644200000162527,
+          "embedding_plus_ranking_ms": 32.261600000310864
+        }
+      }
+    },
+    {
+      "id": "L19",
+      "group": "existing_local",
+      "question": "What is the central retrieval technique introduced by ColBERT?",
+      "source": "10_colbert.pdf",
+      "answer_patterns": [
+        "late interaction"
+      ],
+      "gold_anchor_ids": [
+        "chunk_1061",
+        "chunk_1062",
+        "chunk_1063",
+        "chunk_1064",
+        "chunk_1070",
+        "chunk_1072",
+        "chunk_1073",
+        "chunk_1077",
+        "chunk_1078",
+        "chunk_1086",
+        "chunk_1088",
+        "chunk_1089",
+        "chunk_1091",
+        "chunk_1097",
+        "chunk_1106",
+        "chunk_1110",
+        "chunk_1122",
+        "chunk_1123",
+        "chunk_1124",
+        "chunk_1125",
+        "chunk_1137",
+        "chunk_1138",
+        "chunk_1139",
+        "chunk_1143"
+      ],
+      "reserved_ids": [
+        "chunk_1061",
+        "chunk_1062",
+        "chunk_1079",
+        "chunk_1070"
+      ],
+      "embedding_ms": 22.21910000025673,
+      "variants": {
+        "dense": {
+          "ids": [
+            "chunk_1105",
+            "chunk_1140",
+            "chunk_1076",
+            "chunk_1077",
+            "chunk_1136"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.25,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 4.532500000095752,
+          "embedding_plus_ranking_ms": 26.751600000352482
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_1110",
+            "chunk_1063",
+            "chunk_1105",
+            "chunk_1079",
+            "chunk_1140"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.702199999788718,
+          "embedding_plus_ranking_ms": 30.92130000004545
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_1061",
+            "chunk_1062",
+            "chunk_1079",
+            "chunk_1070",
+            "chunk_1110"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 9.32959999954619,
+          "embedding_plus_ranking_ms": 31.54869999980292
+        }
+      }
+    },
+    {
+      "id": "L20",
+      "group": "existing_local",
+      "question": "Does ColBERT jointly encode every query-document pair with BERT?",
+      "source": "10_colbert.pdf",
+      "answer_patterns": [
+        "independent",
+        "query",
+        "document"
+      ],
+      "gold_anchor_ids": [
+        "chunk_1062",
+        "chunk_1143"
+      ],
+      "reserved_ids": [
+        "chunk_512",
+        "chunk_513",
+        "chunk_539",
+        "chunk_531"
+      ],
+      "embedding_ms": 22.046400000363064,
+      "variants": {
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_1144",
+            "chunk_1083",
+            "chunk_1102",
+            "chunk_1098",
+            "chunk_1087"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.370499999728054,
+          "embedding_plus_ranking_ms": 30.41690000009112
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_512",
+            "chunk_513",
+            "chunk_539",
+            "chunk_531",
+            "chunk_1144"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.2,
+          "ranking_median_ms": 9.181100000205333,
+          "embedding_plus_ranking_ms": 31.227500000568398
+        },
+        "dense": {
+          "ids": [
+            "chunk_1078",
+            "chunk_1094",
+            "chunk_1098",
+            "chunk_1088",
+            "chunk_1138"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 4.409499999383115,
+          "embedding_plus_ranking_ms": 26.45589999974618
+        }
+      }
+    },
+    {
+      "id": "D01",
+      "group": "added_detail",
+      "question": "How many passages does the original RAG paper index from its Wikipedia dump?",
+      "source": "01_rag_knowledge_intensive_nlp.pdf",
+      "answer_patterns": [
+        "21m documents"
+      ],
+      "gold_anchor_ids": [
+        "chunk_21"
+      ],
+      "reserved_ids": [],
+      "embedding_ms": 25.975800000196614,
+      "variants": {
+        "current_hybrid": {
+          "ids": [
+            "chunk_446",
+            "chunk_117",
+            "chunk_48",
+            "chunk_45",
+            "chunk_445"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.4,
+          "ranking_median_ms": 8.981699999822013,
+          "embedding_plus_ranking_ms": 34.95750000001863
+        },
+        "dense": {
+          "ids": [
+            "chunk_48",
+            "chunk_446",
+            "chunk_58",
+            "chunk_117",
+            "chunk_125"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.4,
+          "ranking_median_ms": 4.4785999998566695,
+          "embedding_plus_ranking_ms": 30.454400000053283
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_446",
+            "chunk_117",
+            "chunk_48",
+            "chunk_45",
+            "chunk_445"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.4,
+          "ranking_median_ms": 8.503099999870756,
+          "embedding_plus_ranking_ms": 34.47890000006737
+        }
+      }
+    },
+    {
+      "id": "D02",
+      "group": "added_detail",
+      "question": "Which three RAG paradigms does the RAG survey distinguish?",
+      "source": "02_rag_survey.pdf",
+      "answer_patterns": [
+        "naive rag",
+        "advanced rag",
+        "modular rag"
+      ],
+      "gold_anchor_ids": [
+        "chunk_112",
+        "chunk_123",
+        "chunk_124",
+        "chunk_131"
+      ],
+      "reserved_ids": [
+        "chunk_111",
+        "chunk_112",
+        "chunk_131",
+        "chunk_120"
+      ],
+      "embedding_ms": 24.673900000379945,
+      "variants": {
+        "dense": {
+          "ids": [
+            "chunk_124",
+            "chunk_119",
+            "chunk_117",
+            "chunk_121",
+            "chunk_123"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 4.640999999537598,
+          "embedding_plus_ranking_ms": 29.314899999917543
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_117",
+            "chunk_119",
+            "chunk_124",
+            "chunk_131",
+            "chunk_122"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.3333333333333333,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.91579999915848,
+          "embedding_plus_ranking_ms": 33.589699999538425
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_111",
+            "chunk_112",
+            "chunk_131",
+            "chunk_120",
+            "chunk_117"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.648800000628398,
+          "embedding_plus_ranking_ms": 33.32270000100834
+        }
+      }
+    },
+    {
+      "id": "D03",
+      "group": "added_detail",
+      "question": "What label-smoothing value is used in Attention Is All You Need?",
+      "source": "03_attention_is_all_you_need.pdf",
+      "answer_patterns": [
+        "label smoothing",
+        "0.1"
+      ],
+      "gold_anchor_ids": [
+        "chunk_323"
+      ],
+      "reserved_ids": [
+        "chunk_287",
+        "chunk_288",
+        "chunk_322",
+        "chunk_299"
+      ],
+      "embedding_ms": 22.623400000156835,
+      "variants": {
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_301",
+            "chunk_302",
+            "chunk_349",
+            "chunk_303",
+            "chunk_328"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.68609999997716,
+          "embedding_plus_ranking_ms": 31.309500000133994
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_287",
+            "chunk_288",
+            "chunk_322",
+            "chunk_299",
+            "chunk_301"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.333599999787111,
+          "embedding_plus_ranking_ms": 30.956999999943946
+        },
+        "dense": {
+          "ids": [
+            "chunk_304",
+            "chunk_350",
+            "chunk_301",
+            "chunk_302",
+            "chunk_313"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 4.5847999999750755,
+          "embedding_plus_ranking_ms": 27.20820000013191
+        }
+      }
+    },
+    {
+      "id": "D04",
+      "group": "added_detail",
+      "question": "What pooling strategy is the default in Sentence-BERT?",
+      "source": "04_sentence_bert.pdf",
+      "answer_patterns": [
+        "mean",
+        "default|configuration"
+      ],
+      "gold_anchor_ids": [
+        "chunk_367",
+        "chunk_368",
+        "chunk_373",
+        "chunk_395",
+        "chunk_396"
+      ],
+      "reserved_ids": [
+        "chunk_353",
+        "chunk_354",
+        "chunk_366",
+        "chunk_371"
+      ],
+      "embedding_ms": 21.30829999987327,
+      "variants": {
+        "current_hybrid": {
+          "ids": [
+            "chunk_353",
+            "chunk_354",
+            "chunk_366",
+            "chunk_371",
+            "chunk_367"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.2,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 9.50009999996837,
+          "embedding_plus_ranking_ms": 30.80839999984164
+        },
+        "dense": {
+          "ids": [
+            "chunk_541",
+            "chunk_531",
+            "chunk_525",
+            "chunk_367",
+            "chunk_542"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.25,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.2,
+          "ranking_median_ms": 4.664599999159691,
+          "embedding_plus_ranking_ms": 25.97289999903296
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_367",
+            "chunk_366",
+            "chunk_613",
+            "chunk_362",
+            "chunk_541"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.6,
+          "ranking_median_ms": 8.502499999849533,
+          "embedding_plus_ranking_ms": 29.810799999722803
+        }
+      }
+    },
+    {
+      "id": "D05",
+      "group": "added_detail",
+      "question": "How does dense passage retrieval score a question-passage pair?",
+      "source": "05_dense_passage_retrieval.pdf",
+      "answer_patterns": [
+        "dot product of their vectors|choose the simpler inner product function|maximizing inner products of the question"
+      ],
+      "gold_anchor_ids": [
+        "chunk_431",
+        "chunk_438",
+        "chunk_439"
+      ],
+      "reserved_ids": [
+        "chunk_423",
+        "chunk_424",
+        "chunk_465",
+        "chunk_458"
+      ],
+      "embedding_ms": 24.159799999324605,
+      "variants": {
+        "dense": {
+          "ids": [
+            "chunk_436",
+            "chunk_468",
+            "chunk_458",
+            "chunk_435",
+            "chunk_451"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 4.39730000016425,
+          "embedding_plus_ranking_ms": 28.557099999488855
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_468",
+            "chunk_467",
+            "chunk_458",
+            "chunk_451",
+            "chunk_425"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.253799999693001,
+          "embedding_plus_ranking_ms": 32.413599999017606
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_423",
+            "chunk_424",
+            "chunk_465",
+            "chunk_458",
+            "chunk_468"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.989099999780592,
+          "embedding_plus_ranking_ms": 33.1488999991052
+        }
+      }
+    },
+    {
+      "id": "D06",
+      "group": "added_detail",
+      "question": "In BERT, what happens to a selected masked token 80 percent of the time?",
+      "source": "06_bert.pdf",
+      "answer_patterns": [
+        "80%",
+        "mask"
+      ],
+      "gold_anchor_ids": [
+        "chunk_536",
+        "chunk_590",
+        "chunk_611",
+        "chunk_612"
+      ],
+      "reserved_ids": [
+        "chunk_512",
+        "chunk_513",
+        "chunk_531",
+        "chunk_545"
+      ],
+      "embedding_ms": 21.69560000038473,
+      "variants": {
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_612",
+            "chunk_536",
+            "chunk_590",
+            "chunk_610",
+            "chunk_535"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 9.228400000210968,
+          "embedding_plus_ranking_ms": 30.924000000595697
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_512",
+            "chunk_513",
+            "chunk_531",
+            "chunk_545",
+            "chunk_612"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.2,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 9.87509999959002,
+          "embedding_plus_ranking_ms": 31.57069999997475
+        },
+        "dense": {
+          "ids": [
+            "chunk_612",
+            "chunk_590",
+            "chunk_536",
+            "chunk_610",
+            "chunk_535"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 4.590699999425851,
+          "embedding_plus_ranking_ms": 26.28629999981058
+        }
+      }
+    },
+    {
+      "id": "D07",
+      "group": "added_detail",
+      "question": "Which question-answering and fact-verification benchmarks are used in ReAct?",
+      "source": "07_react.pdf",
+      "answer_patterns": [
+        "hotpotqa",
+        "fever"
+      ],
+      "gold_anchor_ids": [
+        "chunk_615",
+        "chunk_629",
+        "chunk_642",
+        "chunk_644",
+        "chunk_647",
+        "chunk_648",
+        "chunk_649",
+        "chunk_650",
+        "chunk_651",
+        "chunk_654"
+      ],
+      "reserved_ids": [
+        "chunk_614",
+        "chunk_615",
+        "chunk_629",
+        "chunk_671"
+      ],
+      "embedding_ms": 21.26829999997426,
+      "variants": {
+        "current_hybrid": {
+          "ids": [
+            "chunk_614",
+            "chunk_615",
+            "chunk_629",
+            "chunk_671",
+            "chunk_639"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 9.015699999508797,
+          "embedding_plus_ranking_ms": 30.283999999483058
+        },
+        "dense": {
+          "ids": [
+            "chunk_638",
+            "chunk_629",
+            "chunk_648",
+            "chunk_646",
+            "chunk_674"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 4.6544999995603575,
+          "embedding_plus_ranking_ms": 25.922799999534618
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_629",
+            "chunk_639",
+            "chunk_640",
+            "chunk_615",
+            "chunk_652"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 1.0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 9.171400000013818,
+          "embedding_plus_ranking_ms": 30.43969999998808
+        }
+      }
+    },
+    {
+      "id": "D08",
+      "group": "added_detail",
+      "question": "Which three critique token types are used in Self-RAG?",
+      "source": "08_self_rag.pdf",
+      "answer_patterns": [
+        "isrel",
+        "issup",
+        "isuse"
+      ],
+      "gold_anchor_ids": [
+        "chunk_815",
+        "chunk_816",
+        "chunk_826",
+        "chunk_831",
+        "chunk_840",
+        "chunk_900",
+        "chunk_901",
+        "chunk_904",
+        "chunk_905",
+        "chunk_920",
+        "chunk_925",
+        "chunk_927",
+        "chunk_930",
+        "chunk_932",
+        "chunk_933",
+        "chunk_935",
+        "chunk_937"
+      ],
+      "reserved_ids": [
+        "chunk_792",
+        "chunk_793",
+        "chunk_815",
+        "chunk_828"
+      ],
+      "embedding_ms": 22.579000000405358,
+      "variants": {
+        "dense": {
+          "ids": [
+            "chunk_860",
+            "chunk_797",
+            "chunk_1008",
+            "chunk_1023",
+            "chunk_197"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.4,
+          "ranking_median_ms": 4.526100000475708,
+          "embedding_plus_ranking_ms": 27.105100000881066
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_860",
+            "chunk_797",
+            "chunk_815",
+            "chunk_817",
+            "chunk_1008"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.3333333333333333,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.8,
+          "ranking_median_ms": 8.543799999642943,
+          "embedding_plus_ranking_ms": 31.1228000000483
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_792",
+            "chunk_793",
+            "chunk_815",
+            "chunk_828",
+            "chunk_860"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.3333333333333333,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.910699999432836,
+          "embedding_plus_ranking_ms": 31.489699999838194
+        }
+      }
+    },
+    {
+      "id": "D09",
+      "group": "added_detail",
+      "question": "Which pretrained model initializes the corrective RAG retrieval evaluator?",
+      "source": "09_corrective_rag.pdf",
+      "answer_patterns": [
+        "t5.large",
+        "evaluator"
+      ],
+      "gold_anchor_ids": [
+        "chunk_984",
+        "chunk_1054"
+      ],
+      "reserved_ids": [
+        "chunk_962",
+        "chunk_963",
+        "chunk_976",
+        "chunk_994"
+      ],
+      "embedding_ms": 24.410200000602345,
+      "variants": {
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_117",
+            "chunk_982",
+            "chunk_121",
+            "chunk_1054",
+            "chunk_118"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.25,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.4,
+          "ranking_median_ms": 8.832800000163843,
+          "embedding_plus_ranking_ms": 33.24300000076619
+        },
+        "current_hybrid": {
+          "ids": [
+            "chunk_962",
+            "chunk_963",
+            "chunk_976",
+            "chunk_994",
+            "chunk_117"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.8,
+          "ranking_median_ms": 9.586699999999837,
+          "embedding_plus_ranking_ms": 33.99690000060218
+        },
+        "dense": {
+          "ids": [
+            "chunk_117",
+            "chunk_121",
+            "chunk_118",
+            "chunk_120",
+            "chunk_131"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 0,
+          "target_paper_fraction_at_5": 0.0,
+          "ranking_median_ms": 4.837500000576256,
+          "embedding_plus_ranking_ms": 29.2477000011786
+        }
+      }
+    },
+    {
+      "id": "D10",
+      "group": "added_detail",
+      "question": "How does ColBERT aggregate its maximum token similarities into a passage score?",
+      "source": "10_colbert.pdf",
+      "answer_patterns": [
+        "maxsim",
+        "sum|summation"
+      ],
+      "gold_anchor_ids": [
+        "chunk_1076",
+        "chunk_1089",
+        "chunk_1091",
+        "chunk_1103"
+      ],
+      "reserved_ids": [
+        "chunk_1061",
+        "chunk_1062",
+        "chunk_1098",
+        "chunk_1088"
+      ],
+      "embedding_ms": 25.008700000398676,
+      "variants": {
+        "current_hybrid": {
+          "ids": [
+            "chunk_1061",
+            "chunk_1062",
+            "chunk_1098",
+            "chunk_1088",
+            "chunk_1079"
+          ],
+          "anchor_hit_at_5": 0,
+          "anchor_reciprocal_rank_at_5": 0,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 8.797299999969255,
+          "embedding_plus_ranking_ms": 33.80600000036793
+        },
+        "dense": {
+          "ids": [
+            "chunk_1105",
+            "chunk_1076",
+            "chunk_1098",
+            "chunk_1107",
+            "chunk_1109"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.5,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 1.0,
+          "ranking_median_ms": 4.753100000016275,
+          "embedding_plus_ranking_ms": 29.76180000041495
+        },
+        "hybrid_without_reservation": {
+          "ids": [
+            "chunk_1079",
+            "chunk_1095",
+            "chunk_1105",
+            "chunk_910",
+            "chunk_1076"
+          ],
+          "anchor_hit_at_5": 1,
+          "anchor_reciprocal_rank_at_5": 0.2,
+          "target_paper_hit_at_5": 1,
+          "target_paper_fraction_at_5": 0.8,
+          "ranking_median_ms": 8.70279999980994,
+          "embedding_plus_ranking_ms": 33.711500000208616
+        }
+      }
+    }
+  ],
+  "label_review": "D05 anchor tightened after inspecting the retrieved passages: a discussion of alternative similarities is not treated as a definition of DPR scoring. Stored rankings and timing measurements were reused; no retrieval or model calls were repeated."
+}
