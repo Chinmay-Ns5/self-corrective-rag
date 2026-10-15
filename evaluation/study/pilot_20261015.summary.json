@@ -1,0 +1,258 @@
+{
+  "s1:first": {
+    "questions": 6,
+    "errors": 1,
+    "mean_seconds": 13.429450000000001,
+    "median_seconds": 13.30325,
+    "llm_calls": 12,
+    "graph_llm_calls": 0,
+    "graph_extraction_failures": 0,
+    "web_network_calls": 0,
+    "web_cache_hits": 0,
+    "answer_correct": {
+      "positive": 3,
+      "reviewed": 6,
+      "rate": 0.5
+    },
+    "context_sufficient": {
+      "positive": 0,
+      "reviewed": 5,
+      "rate": 0.0
+    },
+    "nli_estimates_not_ground_truth": {
+      "before_supported": 0,
+      "before_claims": 0,
+      "after_supported": 0,
+      "after_claims": 0,
+      "removed_claims": 0,
+      "repaired_claims": 0,
+      "repair_attempts": 0,
+      "nli_pairs": 0
+    },
+    "reviewed_claim_support": {
+      "supported": 0,
+      "total": 0,
+      "rate": null
+    },
+    "preselected_context_proxy": {
+      "complete": 0,
+      "questions": 4
+    }
+  },
+  "s2:first": {
+    "questions": 6,
+    "errors": 1,
+    "mean_seconds": 11.42435,
+    "median_seconds": 11.806000000000001,
+    "llm_calls": 13,
+    "graph_llm_calls": 0,
+    "graph_extraction_failures": 0,
+    "web_network_calls": 0,
+    "web_cache_hits": 0,
+    "answer_correct": {
+      "positive": 4,
+      "reviewed": 6,
+      "rate": 0.6666666666666666
+    },
+    "context_sufficient": {
+      "positive": 4,
+      "reviewed": 5,
+      "rate": 0.8
+    },
+    "nli_estimates_not_ground_truth": {
+      "before_supported": 0,
+      "before_claims": 0,
+      "after_supported": 0,
+      "after_claims": 0,
+      "removed_claims": 0,
+      "repaired_claims": 0,
+      "repair_attempts": 0,
+      "nli_pairs": 0
+    },
+    "reviewed_claim_support": {
+      "supported": 0,
+      "total": 0,
+      "rate": null
+    },
+    "preselected_context_proxy": {
+      "complete": 3,
+      "questions": 4
+    }
+  },
+  "s3:first": {
+    "questions": 6,
+    "errors": 0,
+    "mean_seconds": 15.886750000000001,
+    "median_seconds": 18.650550000000003,
+    "llm_calls": 16,
+    "graph_llm_calls": 0,
+    "graph_extraction_failures": 0,
+    "web_network_calls": 1,
+    "web_cache_hits": 1,
+    "answer_correct": {
+      "positive": 6,
+      "reviewed": 6,
+      "rate": 1.0
+    },
+    "context_sufficient": {
+      "positive": 4,
+      "reviewed": 5,
+      "rate": 0.8
+    },
+    "reviewed_routing": {
+      "correct": 4,
+      "reviewed": 6
+    },
+    "nli_estimates_not_ground_truth": {
+      "before_supported": 0,
+      "before_claims": 0,
+      "after_supported": 0,
+      "after_claims": 0,
+      "removed_claims": 0,
+      "repaired_claims": 0,
+      "repair_attempts": 0,
+      "nli_pairs": 0
+    },
+    "reviewed_claim_support": {
+      "supported": 0,
+      "total": 0,
+      "rate": null
+    },
+    "preselected_context_proxy": {
+      "complete": 3,
+      "questions": 4
+    }
+  },
+  "s4:first": {
+    "questions": 6,
+    "errors": 0,
+    "mean_seconds": 33.64626666666667,
+    "median_seconds": 34.49815,
+    "llm_calls": 23,
+    "graph_llm_calls": 7,
+    "graph_extraction_failures": 1,
+    "web_network_calls": 1,
+    "web_cache_hits": 1,
+    "answer_correct": {
+      "positive": 5,
+      "reviewed": 6,
+      "rate": 0.8333333333333334
+    },
+    "context_sufficient": {
+      "positive": 4,
+      "reviewed": 5,
+      "rate": 0.8
+    },
+    "reviewed_routing": {
+      "correct": 4,
+      "reviewed": 6
+    },
+    "nli_estimates_not_ground_truth": {
+      "before_supported": 0,
+      "before_claims": 0,
+      "after_supported": 0,
+      "after_claims": 0,
+      "removed_claims": 0,
+      "repaired_claims": 0,
+      "repair_attempts": 0,
+      "nli_pairs": 0
+    },
+    "reviewed_claim_support": {
+      "supported": 0,
+      "total": 0,
+      "rate": null
+    },
+    "preselected_context_proxy": {
+      "complete": 3,
+      "questions": 4
+    }
+  },
+  "s4:repeat": {
+    "questions": 6,
+    "errors": 0,
+    "mean_seconds": 6.52545,
+    "median_seconds": 7.1899999999999995,
+    "llm_calls": 16,
+    "graph_llm_calls": 0,
+    "graph_extraction_failures": 0,
+    "web_network_calls": 0,
+    "web_cache_hits": 2,
+    "answer_correct": {
+      "positive": 6,
+      "reviewed": 6,
+      "rate": 1.0
+    },
+    "context_sufficient": {
+      "positive": 4,
+      "reviewed": 5,
+      "rate": 0.8
+    },
+    "reviewed_routing": {
+      "correct": 4,
+      "reviewed": 6
+    },
+    "nli_estimates_not_ground_truth": {
+      "before_supported": 0,
+      "before_claims": 0,
+      "after_supported": 0,
+      "after_claims": 0,
+      "removed_claims": 0,
+      "repaired_claims": 0,
+      "repair_attempts": 0,
+      "nli_pairs": 0
+    },
+    "reviewed_claim_support": {
+      "supported": 0,
+      "total": 0,
+      "rate": null
+    },
+    "preselected_context_proxy": {
+      "complete": 3,
+      "questions": 4
+    }
+  },
+  "s5:first": {
+    "questions": 6,
+    "errors": 0,
+    "mean_seconds": 16.285966666666667,
+    "median_seconds": 19.529200000000003,
+    "llm_calls": 25,
+    "graph_llm_calls": 0,
+    "graph_extraction_failures": 0,
+    "web_network_calls": 0,
+    "web_cache_hits": 2,
+    "answer_correct": {
+      "positive": 2,
+      "reviewed": 6,
+      "rate": 0.3333333333333333
+    },
+    "context_sufficient": {
+      "positive": 4,
+      "reviewed": 5,
+      "rate": 0.8
+    },
+    "reviewed_routing": {
+      "correct": 4,
+      "reviewed": 6
+    },
+    "nli_estimates_not_ground_truth": {
+      "before_supported": 1,
+      "before_claims": 16,
+      "after_supported": 2,
+      "after_claims": 2,
+      "removed_claims": 14,
+      "repaired_claims": 1,
+      "repair_attempts": 9,
+      "nli_pairs": 22
+    },
+    "reviewed_claim_support": {
+      "supported": 0,
+      "total": 0,
+      "rate": null
+    },
+    "preselected_context_proxy": {
+      "complete": 3,
+      "questions": 4
+    }
+  }
+}

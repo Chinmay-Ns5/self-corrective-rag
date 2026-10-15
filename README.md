@@ -4,6 +4,13 @@ Integrated Prompt Engineering mini project combining the ingestion, CRAG backend
 
 ## Literature review and presentation
 
+The next-review CLI comparison (S1 dense, S2 hybrid, S3 CRAG, S4 graph-assisted
+CRAG, S5 CRAG with NLI verification) is documented in
+[docs/comparative_study.md](docs/comparative_study.md). It includes controlled
+prompts, bounded web usage, graph-cache accounting, review templates and a
+disjoint threshold-calibration workflow. These experimental variants do not
+change the Streamlit application.
+
 For a first-review PPT, give the slide-writing LLM
 [docs/literature_review_and_contribution.md](docs/literature_review_and_contribution.md).
 It is a standalone brief with paper summaries, implementation differences,
