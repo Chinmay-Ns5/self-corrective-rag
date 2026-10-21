@@ -6,6 +6,11 @@ controlled comparative study, not a claim of a new RAG algorithm.
 
 The completed development pilot and observed failures are recorded in
 [the pilot findings](../evaluation/study/pilot_findings_20261015.md).
+The later [paired CRAG/graph follow-up](../evaluation/study/graph_followup_findings_20261021.md)
+repeats both systems: it found equal repeat mean latency and no reviewed quality
+advantage for the graph in that development workload.
+The [research follow-up](next_review_research_20261015.md) maps the review notes
+to verified prior work and records the current graph's limitations.
 
 ## Variants and controls
 
@@ -57,6 +62,12 @@ a separate project `.venv`.
 ```
 
 Use `--ids C01,C03` for selected questions. `--systems` accepts any subset.
+For a fair repeat comparison, use `--systems s3 s4 --repeat-all --warmup`.
+This runs both first trials before either repeat, reverses their order for the
+repeat round, and alternates the starting system across questions. One neutral
+warmup generation is counted separately in the manifest and excluded from trial
+timings. Shared Ollama prompt caches can still affect both systems; first trials
+do not imply a cold model. `--repeat-graph` retains the original S4-only repeats.
 `--resume` resumes an existing output only when its saved configuration matches;
 completed question/system/phase rows are skipped. Existing review annotations
 are preserved. Interrupt at a completed row when possible: records are flushed

@@ -45,7 +45,7 @@ def evidence_coverage(question, result):
 def write_review(path, rows):
     columns = ["id", "category", "system", "phase", "question", "reference_answer",
                "expected_route", "observed_route", "score", "answer", "sources",
-               "context_sufficient", "answer_correct", "claims_supported", "claims_total",
+               "context_sufficient", "answer_correct", "answer_grounded", "claims_supported", "claims_total",
                "gold_route", "notes"]
     preserved = {}
     if path.exists():
@@ -65,8 +65,19 @@ def write_review(path, rows):
                 "score": (result.get("evaluation") or {}).get("score", ""),
                 "answer": result.get("answer", ""),
                 "sources": json.dumps(result.get("sources", []), ensure_ascii=False),
-                **{key: labels.get(key, "") for key in ("context_sufficient", "answer_correct",
+                **{key: labels.get(key, "") for key in ("context_sufficient", "answer_correct", "answer_grounded",
                     "claims_supported", "claims_total", "gold_route", "notes")}})
+
+
+def trial_order(names, position, repeat_graph=False, repeat_all=False):
+    """Counterbalance first/repeat order; both variants can get warm trials."""
+    offset = position % len(names)
+    ordered = names[offset:] + names[:offset]
+    if repeat_all:
+        return [(name, "first") for name in ordered] + [
+            (name, "repeat") for name in reversed(ordered)]
+    return [(name, phase) for name in ordered for phase in (
+        ["first", "repeat"] if name == "s4" and repeat_graph else ["first"])]
 
 
 def main(argv=None):
@@ -80,6 +91,10 @@ def main(argv=None):
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--retrieval-only", action="store_true")
     parser.add_argument("--repeat-graph", action="store_true")
+    parser.add_argument("--repeat-all", action="store_true",
+                        help="Repeat every variant, reversing order on the second round")
+    parser.add_argument("--warmup", action="store_true",
+                        help="One untimed neutral generation before trials; counted in manifest")
     parser.add_argument("--web-mode", choices=["off", "cache", "live"], default="off")
     parser.add_argument("--web-budget", type=int, default=0)
     parser.add_argument("--cache-dir", type=Path, default=ROOT / "data/study_cache")
@@ -141,6 +156,11 @@ def main(argv=None):
         llm = OllamaLLM(settings.ollama_model, settings.ollama_url)
         if not args.retrieval_only:
             llm.check_ready()
+        warmup_seconds = 0.0
+        if args.warmup and not args.retrieval_only:
+            warmup_start = time.perf_counter()
+            llm.complete("Reply with only the word READY.")
+            warmup_seconds = time.perf_counter() - warmup_start
         scorer = NLIScorer(args.model_cache, args.download_models) if "s5" in names else None
         web_mode = "cache" if args.web_mode == "live" and remaining == 0 else args.web_mode
         web = BudgetWeb(TavilySearch(settings.tavily_key) if web_mode == "live" else None,
@@ -164,6 +184,9 @@ def main(argv=None):
                     "web_mode": args.web_mode, "web_budget": args.web_budget,
                     "cache_dir": str(args.cache_dir.resolve()),
                     "context": "Shared generator prompt and initial top-k; S5 repair retrieves up to two chunks per attempted repair; sentence-level NLI proxy, no automatic correctness labels"}
+        if args.repeat_all or args.warmup:
+            manifest.update(repeat_all=args.repeat_all, warmup=args.warmup,
+                            order="rotated first round; reversed repeat round")
     setup_seconds = time.perf_counter() - started
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -174,49 +197,48 @@ def main(argv=None):
                 parser.error("Resume configuration differs from the saved manifest")
         else:
             meta.write_text(json.dumps({"configuration": manifest, "setup_seconds": setup_seconds,
+                                       "warmup_seconds": warmup_seconds,
+                                       "warmup_llm_calls": int(args.warmup and not args.retrieval_only),
                                        "started_utc": datetime.now(timezone.utc).isoformat()}, indent=2), encoding="utf-8")
     handle = args.output.open("a", encoding="utf-8") if args.output else None
     all_rows = list(previous)
     try:
         for position, question in enumerate(questions):
             # Rotate order instead of always rewarding one variant with a warm model.
-            offset = position % len(names)
-            for name in names[offset:] + names[:offset]:
-                phases = ["first", "repeat"] if name == "s4" and args.repeat_graph else ["first"]
-                for phase in phases:
-                    if (question["id"], name, phase) in done:
-                        continue
-                    print(f"{question['id']} {name} {phase}", file=sys.stderr, flush=True)
-                    pipeline = systems[name]
-                    start = time.perf_counter()
-                    try:
-                        if args.retrieval_only:
-                            from src.crag.pipeline import local_chunks
-                            raw = pipeline.retriever.retrieve(question["question"], settings.top_k)
-                            chunks = local_chunks(raw)
-                            for item in chunks:
-                                item["chunk_id"] = raw["ids"][0][int(item["id"][1:]) - 1]
-                            result = {"retrieved_documents": chunks, "mode": "retrieval_only",
-                                      "retrieval_details": dict(getattr(pipeline.retriever, "last_details", {})),
-                                      "latency_seconds": time.perf_counter() - start,
-                                      "metrics": {"llm_calls": 0, "web_network_calls": 0}, "error": ""}
-                        else:
-                            result = pipeline.ask(question["question"])
-                        result["preselected_context_coverage"] = evidence_coverage(question, result)
-                    except Exception as exc:
-                        result = {"error": str(exc), "latency_seconds": time.perf_counter() - start,
-                                  "metrics": {"llm_calls": len(pipeline.llm.events),
-                                              "web_network_calls": web.network_calls - sum(
-                                                  r["result"].get("metrics", {}).get("web_network_calls", 0)
-                                                  for r in all_rows[len(previous):])}}
-                    row = {**question, "system": name, "phase": phase, "result": result}
-                    all_rows.append(row)
-                    encoded = json.dumps(row, ensure_ascii=False)
-                    if handle:
-                        handle.write(encoded + "\n")
-                        handle.flush()
+            for name, phase in trial_order(names, position, args.repeat_graph, args.repeat_all):
+                if (question["id"], name, phase) in done:
+                    continue
+                print(f"{question['id']} {name} {phase}", file=sys.stderr, flush=True)
+                pipeline = systems[name]
+                start = time.perf_counter()
+                try:
+                    if args.retrieval_only:
+                        from src.crag.pipeline import local_chunks
+                        raw = pipeline.retriever.retrieve(question["question"], settings.top_k)
+                        chunks = local_chunks(raw)
+                        for item in chunks:
+                            item["chunk_id"] = raw["ids"][0][int(item["id"][1:]) - 1]
+                        result = {"retrieved_documents": chunks, "mode": "retrieval_only",
+                                  "retrieval_details": dict(getattr(pipeline.retriever, "last_details", {})),
+                                  "latency_seconds": time.perf_counter() - start,
+                                  "metrics": {"llm_calls": 0, "web_network_calls": 0}, "error": ""}
                     else:
-                        print(encoded, flush=True)
+                        result = pipeline.ask(question["question"])
+                    result["preselected_context_coverage"] = evidence_coverage(question, result)
+                except Exception as exc:
+                    result = {"error": str(exc), "latency_seconds": time.perf_counter() - start,
+                              "metrics": {"llm_calls": len(pipeline.llm.events),
+                                          "web_network_calls": web.network_calls - sum(
+                                              r["result"].get("metrics", {}).get("web_network_calls", 0)
+                                              for r in all_rows[len(previous):])}}
+                row = {**question, "system": name, "phase": phase, "result": result}
+                all_rows.append(row)
+                encoded = json.dumps(row, ensure_ascii=False)
+                if handle:
+                    handle.write(encoded + "\n")
+                    handle.flush()
+                else:
+                    print(encoded, flush=True)
     finally:
         if handle:
             handle.close()

@@ -11,6 +11,14 @@ prompts, bounded web usage, graph-cache accounting, review templates and a
 disjoint threshold-calibration workflow. These experimental variants do not
 change the Streamlit application.
 
+The [paired graph comparison](evaluation/study/graph_followup_findings_20261021.md)
+completed 48 trials: both systems averaged about 9.61 seconds on repeat, while
+the experimental graph had higher first-trial cost and no reviewed quality gain.
+
+The [research follow-up](docs/next_review_research_20261015.md) checks the graph,
+verification, confidence-gate, memory and caching ideas against primary sources
+and identifies what can be evaluated without generative LLM calls.
+
 For a first-review PPT, give the slide-writing LLM
 [docs/literature_review_and_contribution.md](docs/literature_review_and_contribution.md).
 It is a standalone brief with paper summaries, implementation differences,

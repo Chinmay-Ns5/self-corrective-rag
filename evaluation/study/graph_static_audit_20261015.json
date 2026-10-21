@@ -1,0 +1,192 @@
+{
+  "scope": "Static CPU audit of existing index/caches only; no embeddings, generative LLM, NLI or web search calls",
+  "documents": 10,
+  "chunks": 1158,
+  "keyword_nodes": 373,
+  "shared_keywords": 21,
+  "maximum_keyword_document_degree": 4,
+  "keyword_degree_histogram": {
+    "1": 352,
+    "2": 16,
+    "3": 4,
+    "4": 1
+  },
+  "shared_keyword_examples": [
+    {
+      "term": "rag",
+      "documents": [
+        "01_rag_knowledge_intensive_nlp.pdf",
+        "02_rag_survey.pdf",
+        "08_self_rag.pdf",
+        "09_corrective_rag.pdf"
+      ]
+    },
+    {
+      "term": "bert",
+      "documents": [
+        "04_sentence_bert.pdf",
+        "06_bert.pdf",
+        "10_colbert.pdf"
+      ]
+    },
+    {
+      "term": "classi",
+      "documents": [
+        "01_rag_knowledge_intensive_nlp.pdf",
+        "04_sentence_bert.pdf",
+        "06_bert.pdf"
+      ]
+    },
+    {
+      "term": "retrieval",
+      "documents": [
+        "02_rag_survey.pdf",
+        "05_dense_passage_retrieval.pdf",
+        "09_corrective_rag.pdf"
+      ]
+    },
+    {
+      "term": "self",
+      "documents": [
+        "03_attention_is_all_you_need.pdf",
+        "08_self_rag.pdf",
+        "09_corrective_rag.pdf"
+      ]
+    },
+    {
+      "term": "action",
+      "documents": [
+        "07_react.pdf",
+        "09_corrective_rag.pdf"
+      ]
+    },
+    {
+      "term": "bertbase",
+      "documents": [
+        "06_bert.pdf",
+        "10_colbert.pdf"
+      ]
+    },
+    {
+      "term": "bm25",
+      "documents": [
+        "05_dense_passage_retrieval.pdf",
+        "10_colbert.pdf"
+      ]
+    },
+    {
+      "term": "dpr",
+      "documents": [
+        "01_rag_knowledge_intensive_nlp.pdf",
+        "05_dense_passage_retrieval.pdf"
+      ]
+    },
+    {
+      "term": "find",
+      "documents": [
+        "07_react.pdf",
+        "08_self_rag.pdf"
+      ]
+    },
+    {
+      "term": "layer",
+      "documents": [
+        "03_attention_is_all_you_need.pdf",
+        "06_bert.pdf"
+      ]
+    },
+    {
+      "term": "llama2",
+      "documents": [
+        "08_self_rag.pdf",
+        "09_corrective_rag.pdf"
+      ]
+    },
+    {
+      "term": "llms",
+      "documents": [
+        "02_rag_survey.pdf",
+        "09_corrective_rag.pdf"
+      ]
+    },
+    {
+      "term": "open",
+      "documents": [
+        "01_rag_knowledge_intensive_nlp.pdf",
+        "05_dense_passage_retrieval.pdf"
+      ]
+    },
+    {
+      "term": "org",
+      "documents": [
+        "01_rag_knowledge_intensive_nlp.pdf",
+        "08_self_rag.pdf"
+      ]
+    },
+    {
+      "term": "popqa",
+      "documents": [
+        "08_self_rag.pdf",
+        "09_corrective_rag.pdf"
+      ]
+    },
+    {
+      "term": "retriever",
+      "documents": [
+        "01_rag_knowledge_intensive_nlp.pdf",
+        "05_dense_passage_retrieval.pdf"
+      ]
+    },
+    {
+      "term": "searches",
+      "documents": [
+        "02_rag_survey.pdf",
+        "09_corrective_rag.pdf"
+      ]
+    },
+    {
+      "term": "squad",
+      "documents": [
+        "05_dense_passage_retrieval.pdf",
+        "06_bert.pdf"
+      ]
+    },
+    {
+      "term": "triplet",
+      "documents": [
+        "04_sentence_bert.pdf",
+        "05_dense_passage_retrieval.pdf"
+      ]
+    },
+    {
+      "term": "url",
+      "documents": [
+        "01_rag_knowledge_intensive_nlp.pdf",
+        "08_self_rag.pdf"
+      ]
+    }
+  ],
+  "semantic_caches": {
+    "pilot_20261015": {
+      "cache_files": 6,
+      "accepted_triples": 5,
+      "entity_strings": 10,
+      "entities_shared_across_documents": 0,
+      "note": "Only exact normalized entity strings counted; cache sets are separate and are not merged."
+    },
+    "graph_format_fix_20261015": {
+      "cache_files": 2,
+      "accepted_triples": 1,
+      "entity_strings": 2,
+      "entities_shared_across_documents": 0,
+      "note": "Only exact normalized entity strings counted; cache sets are separate and are not merged."
+    },
+    "graph_followup_20261015": {
+      "cache_files": 3,
+      "accepted_triples": 1,
+      "entity_strings": 2,
+      "entities_shared_across_documents": 0,
+      "note": "Only exact normalized entity strings counted; cache sets are separate and are not merged."
+    }
+  }
+}

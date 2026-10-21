@@ -1,0 +1,44 @@
+{
+  "status": "stopped_at_user_request_gpu_in_use",
+  "recorded_at": "2026-10-15T19:25:59.869808+05:30",
+  "planned_trials": 48,
+  "completed_trials": 5,
+  "complete_four_trial_question_blocks": 1,
+  "ollama_model_unloaded": true,
+  "web_network_calls": 0,
+  "interpretation": "Interrupted development run under competing GPU usage. No performance or accuracy conclusion. Do not pool with a later clean GPU run. An in-flight request was cancelled and is not represented by a completed row.",
+  "local_raw_results": "evaluation\\results\\graph_followup_20261015.jsonl",
+  "completed_rows": [
+    {
+      "id": "G01",
+      "system": "s3",
+      "phase": "first",
+      "latency_seconds": 64.9416
+    },
+    {
+      "id": "G01",
+      "system": "s4",
+      "phase": "first",
+      "latency_seconds": 85.675
+    },
+    {
+      "id": "G01",
+      "system": "s4",
+      "phase": "repeat",
+      "latency_seconds": 19.9946
+    },
+    {
+      "id": "G01",
+      "system": "s3",
+      "phase": "repeat",
+      "latency_seconds": 51.4705
+    },
+    {
+      "id": "G02",
+      "system": "s4",
+      "phase": "first",
+      "latency_seconds": 97.4658
+    }
+  ],
+  "next_live_action": "Wait for the user to free the GPU. For clean timings, use a new output and fresh cache directory; existing --resume remains available for functional continuation but does not undo GPU contention."
+}

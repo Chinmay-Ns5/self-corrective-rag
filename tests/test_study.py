@@ -11,7 +11,7 @@ from src.study.graph import KeywordGraph
 from src.study.retrieval import BalancedHybrid
 from src.study.systems import BudgetWeb, MeteredLLM, StudyPipeline, make_systems
 from src.study.verification import ABSTENTION, ClaimVerifier, sentences
-from scripts.compare_rag import evidence_coverage, load_questions, write_review
+from scripts.compare_rag import evidence_coverage, load_questions, write_review, trial_order
 from scripts.calibrate_routes import calibrate
 from scripts.summarize_study import summarize
 
@@ -196,6 +196,14 @@ class VerificationStudyTests(unittest.TestCase):
 
 
 class ResourceStudyTests(unittest.TestCase):
+    def test_repeat_all_counterbalances_both_systems(self):
+        self.assertEqual(trial_order(["s3", "s4"], 0, repeat_all=True),
+                         [("s3", "first"), ("s4", "first"), ("s4", "repeat"), ("s3", "repeat")])
+        self.assertEqual(trial_order(["s3", "s4"], 1, repeat_all=True),
+                         [("s4", "first"), ("s3", "first"), ("s3", "repeat"), ("s4", "repeat")])
+        self.assertEqual(trial_order(["s3", "s4"], 0, repeat_graph=True),
+                         [("s3", "first"), ("s4", "first"), ("s4", "repeat")])
+
     def test_web_cache_and_budget_apply_across_clients(self):
         class Search:
             calls = 0
@@ -327,6 +335,17 @@ class CalibrationStudyTests(unittest.TestCase):
         self.assertIsNone(entry["answer_correct"]["rate"])
         self.assertIsNone(entry["reviewed_claim_support"]["rate"])
         self.assertEqual(entry["nli_estimates_not_ground_truth"]["removed_claims"], 1)
+
+    def test_true_fact_with_wrong_citation_is_not_correct_and_grounded(self):
+        rows = [{"id": "a", "system": "s3", "phase": "repeat", "result": {
+            "latency_seconds": 3, "metrics": {"retrieval_events": [{"seconds": 0.1}],
+                "llm_events": [{"stage": "generation", "seconds": 2}]}}}]
+        labels = {("a", "s3", "repeat"): {"answer_correct": "1", "answer_grounded": "0"}}
+        result = summarize(rows, labels)["s3:repeat"]
+        self.assertEqual(result["correct_and_grounded"]["positive"], 0)
+        self.assertEqual(result["correct_and_grounded"]["reviewed"], 1)
+        self.assertAlmostEqual(result["mean_retrieval_seconds"], 0.1)
+        self.assertEqual(result["llm_stage_total_seconds"]["generation"], 2)
 
 
 if __name__ == "__main__":

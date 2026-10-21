@@ -31,10 +31,21 @@ def summarize(rows, review=None):
                     for result in results for status in result.get("retrieval_details", {}).get("expansions", {}).values()),
                  "web_network_calls": sum(m.get("web_network_calls", 0) for m in metrics),
                  "web_cache_hits": sum(m.get("web_cache_hits", 0) for m in metrics)}
-        for field in ("answer_correct", "context_sufficient"):
+        retrieval_times = [sum(e["seconds"] for e in m.get("retrieval_events", [])) for m in metrics]
+        stages = {}
+        for metric in metrics:
+            for event in metric.get("llm_events", []):
+                stages[event["stage"]] = stages.get(event["stage"], 0) + event["seconds"]
+        entry["mean_retrieval_seconds"] = statistics.mean(retrieval_times) if retrieval_times else None
+        entry["llm_stage_total_seconds"] = stages
+        for field in ("answer_correct", "answer_grounded", "context_sufficient"):
             values = [int(label[field]) for label in labels if label.get(field, "") in {"0", "1"}]
             entry[field] = {"positive": sum(values), "reviewed": len(values),
                             "rate": sum(values) / len(values) if values else None}
+        both = [int(label["answer_correct"] == label["answer_grounded"] == "1") for label in labels
+                if label.get("answer_correct") in {"0", "1"} and label.get("answer_grounded") in {"0", "1"}]
+        entry["correct_and_grounded"] = {"positive": sum(both), "reviewed": len(both),
+                                         "rate": sum(both) / len(both) if both else None}
         judged_routes = [(r["result"].get("route"), label["gold_route"])
                          for r, label in zip(batch, labels) if label.get("gold_route") in
                          {"LOCAL", "WEB", "REWRITE_AND_WEB", "CLARIFY"}]

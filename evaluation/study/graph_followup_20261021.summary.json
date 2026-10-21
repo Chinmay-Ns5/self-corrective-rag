@@ -1,0 +1,243 @@
+{
+  "s3:first": {
+    "questions": 12,
+    "errors": 3,
+    "mean_seconds": 15.652325,
+    "median_seconds": 14.3477,
+    "llm_calls": 33,
+    "graph_llm_calls": 0,
+    "graph_extraction_failures": 0,
+    "web_network_calls": 0,
+    "web_cache_hits": 0,
+    "mean_retrieval_seconds": 0.0590013416652558,
+    "llm_stage_total_seconds": {
+      "clarification": 14.713631699996768,
+      "grading": 111.20422429998143,
+      "generation": 61.12936319999426
+    },
+    "answer_correct": {
+      "positive": 7,
+      "reviewed": 12,
+      "rate": 0.5833333333333334
+    },
+    "answer_grounded": {
+      "positive": 8,
+      "reviewed": 12,
+      "rate": 0.6666666666666666
+    },
+    "context_sufficient": {
+      "positive": 6,
+      "reviewed": 12,
+      "rate": 0.5
+    },
+    "correct_and_grounded": {
+      "positive": 4,
+      "reviewed": 12,
+      "rate": 0.3333333333333333
+    },
+    "reviewed_routing": {
+      "correct": 9,
+      "reviewed": 12
+    },
+    "nli_estimates_not_ground_truth": {
+      "before_supported": 0,
+      "before_claims": 0,
+      "after_supported": 0,
+      "after_claims": 0,
+      "removed_claims": 0,
+      "repaired_claims": 0,
+      "repair_attempts": 0,
+      "nli_pairs": 0
+    },
+    "reviewed_claim_support": {
+      "supported": 0,
+      "total": 0,
+      "rate": null
+    },
+    "preselected_context_proxy": {
+      "complete": 6,
+      "questions": 12
+    }
+  },
+  "s3:repeat": {
+    "questions": 12,
+    "errors": 3,
+    "mean_seconds": 9.607691666666666,
+    "median_seconds": 9.3163,
+    "llm_calls": 33,
+    "graph_llm_calls": 0,
+    "graph_extraction_failures": 0,
+    "web_network_calls": 0,
+    "web_cache_hits": 0,
+    "mean_retrieval_seconds": 0.03882763333240291,
+    "llm_stage_total_seconds": {
+      "clarification": 11.096192000011797,
+      "grading": 56.068458099987765,
+      "generation": 47.609250500005146
+    },
+    "answer_correct": {
+      "positive": 7,
+      "reviewed": 12,
+      "rate": 0.5833333333333334
+    },
+    "answer_grounded": {
+      "positive": 8,
+      "reviewed": 12,
+      "rate": 0.6666666666666666
+    },
+    "context_sufficient": {
+      "positive": 6,
+      "reviewed": 12,
+      "rate": 0.5
+    },
+    "correct_and_grounded": {
+      "positive": 4,
+      "reviewed": 12,
+      "rate": 0.3333333333333333
+    },
+    "reviewed_routing": {
+      "correct": 9,
+      "reviewed": 12
+    },
+    "nli_estimates_not_ground_truth": {
+      "before_supported": 0,
+      "before_claims": 0,
+      "after_supported": 0,
+      "after_claims": 0,
+      "removed_claims": 0,
+      "repaired_claims": 0,
+      "repair_attempts": 0,
+      "nli_pairs": 0
+    },
+    "reviewed_claim_support": {
+      "supported": 0,
+      "total": 0,
+      "rate": null
+    },
+    "preselected_context_proxy": {
+      "complete": 6,
+      "questions": 12
+    }
+  },
+  "s4:first": {
+    "questions": 12,
+    "errors": 2,
+    "mean_seconds": 34.10543333333333,
+    "median_seconds": 32.29665,
+    "llm_calls": 56,
+    "graph_llm_calls": 22,
+    "graph_extraction_failures": 0,
+    "web_network_calls": 0,
+    "web_cache_hits": 0,
+    "mean_retrieval_seconds": 17.55758524166716,
+    "llm_stage_total_seconds": {
+      "clarification": 13.280641600009403,
+      "graph_extraction": 210.06231440001284,
+      "grading": 107.85279720000108,
+      "generation": 77.38511629999266
+    },
+    "answer_correct": {
+      "positive": 7,
+      "reviewed": 12,
+      "rate": 0.5833333333333334
+    },
+    "answer_grounded": {
+      "positive": 8,
+      "reviewed": 12,
+      "rate": 0.6666666666666666
+    },
+    "context_sufficient": {
+      "positive": 6,
+      "reviewed": 12,
+      "rate": 0.5
+    },
+    "correct_and_grounded": {
+      "positive": 4,
+      "reviewed": 12,
+      "rate": 0.3333333333333333
+    },
+    "reviewed_routing": {
+      "correct": 8,
+      "reviewed": 12
+    },
+    "nli_estimates_not_ground_truth": {
+      "before_supported": 0,
+      "before_claims": 0,
+      "after_supported": 0,
+      "after_claims": 0,
+      "removed_claims": 0,
+      "repaired_claims": 0,
+      "repair_attempts": 0,
+      "nli_pairs": 0
+    },
+    "reviewed_claim_support": {
+      "supported": 0,
+      "total": 0,
+      "rate": null
+    },
+    "preselected_context_proxy": {
+      "complete": 6,
+      "questions": 12
+    }
+  },
+  "s4:repeat": {
+    "questions": 12,
+    "errors": 2,
+    "mean_seconds": 9.612508333333334,
+    "median_seconds": 9.4815,
+    "llm_calls": 34,
+    "graph_llm_calls": 0,
+    "graph_extraction_failures": 0,
+    "web_network_calls": 0,
+    "web_cache_hits": 0,
+    "mean_retrieval_seconds": 0.03587564999907045,
+    "llm_stage_total_seconds": {
+      "clarification": 11.346820999999181,
+      "grading": 47.23159250001481,
+      "generation": 56.28391749999719
+    },
+    "answer_correct": {
+      "positive": 7,
+      "reviewed": 12,
+      "rate": 0.5833333333333334
+    },
+    "answer_grounded": {
+      "positive": 8,
+      "reviewed": 12,
+      "rate": 0.6666666666666666
+    },
+    "context_sufficient": {
+      "positive": 6,
+      "reviewed": 12,
+      "rate": 0.5
+    },
+    "correct_and_grounded": {
+      "positive": 4,
+      "reviewed": 12,
+      "rate": 0.3333333333333333
+    },
+    "reviewed_routing": {
+      "correct": 8,
+      "reviewed": 12
+    },
+    "nli_estimates_not_ground_truth": {
+      "before_supported": 0,
+      "before_claims": 0,
+      "after_supported": 0,
+      "after_claims": 0,
+      "removed_claims": 0,
+      "repaired_claims": 0,
+      "repair_attempts": 0,
+      "nli_pairs": 0
+    },
+    "reviewed_claim_support": {
+      "supported": 0,
+      "total": 0,
+      "rate": null
+    },
+    "preselected_context_proxy": {
+      "complete": 6,
+      "questions": 12
+    }
+  }
+}
